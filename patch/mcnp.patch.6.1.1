@@ -1,0 +1,116 @@
+diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/Makefile MCNP_CODE/MCNP611/Source_new/Makefile
+--- MCNP_CODE/MCNP611/Source/Makefile	2016-10-06 13:47:59.000000000 -0500
++++ MCNP_CODE/MCNP611/Source_new/Makefile	2016-10-06 19:28:41.126287350 -0500
+@@ -86 +86 @@
+-	@$(MAKE) -j $(GNUJ) $(EXEC) -k -s;
++	@$(MAKE) -j $(GNUJ) $(EXEC) -k;
+@@ -102 +102 @@
+-	@ $(MAKE) -s -C $(DATASRC_DIR)
++	@ $(MAKE) -C $(DATASRC_DIR)
+@@ -106 +106 @@
+-	@ $(MAKE) -s -C $(UTILS_DIR)
++	@ $(MAKE) -C $(UTILS_DIR)
+@@ -143,2 +143,2 @@
+-	@ $(MAKE) -s -C $(DATASRC_DIR)    clean
+-	@ $(MAKE) -s -C $(MAIN_TEST_DIR)  clean
++	@ $(MAKE) -C $(DATASRC_DIR)    clean
++	@ $(MAKE) -C $(MAIN_TEST_DIR)  clean
+@@ -149,2 +149,2 @@
+-	@ $(MAKE) -s -C $(DATASRC_DIR)    realclean
+-	@ $(MAKE) -s -C $(UTILS_DIR)      realclean
++	@ $(MAKE) -C $(DATASRC_DIR)    realclean
++	@ $(MAKE) -C $(UTILS_DIR)      realclean
+diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/cgm_interface.F90 MCNP_CODE/MCNP611/Source_new/src/cgm_interface.F90
+--- MCNP_CODE/MCNP611/Source/src/cgm_interface.F90
++++ MCNP_CODE/MCNP611/Source_new/src/cgm_interface.F90
+@@ -29,2 +29,4 @@
+-      import :: c_double
+-      real (kind=c_double), external, bind(c) :: rngfunc
++      ! import :: c_double
++      ! real (kind=c_double), external, bind(c) :: rngfunc
++      import :: c_funptr
++      type(c_funptr), value :: rngfunc
+diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/exemes.F90 MCNP_CODE/MCNP611/Source_new/src/exemes.F90
+--- MCNP_CODE/MCNP611/Source/src/exemes.F90
++++ MCNP_CODE/MCNP611/Source_new/src/exemes.F90
+@@ -273 +273 @@
+-      select case( hm(js) )
++      select case( trim(hm(js)) )
+diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/imcn.F90 MCNP_CODE/MCNP611/Source_new/src/imcn.F90
+--- MCNP_CODE/MCNP611/Source/src/imcn.F90
++++ MCNP_CODE/MCNP611/Source_new/src/imcn.F90
+@@ -36,0 +37 @@
++  use, intrinsic :: iso_c_binding
+@@ -2033 +2034,2 @@
+-      call setrngcgm(rang)          
++      ! call setrngcgm(rang)          
++      call setrngcgm(c_funloc(rang))
+@@ -2299 +2301,2 @@
+-      call setrngcgm(rang)          
++      ! call setrngcgm(rang)          
++      call setrngcgm(c_funloc(rang))
+diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/main.F90 MCNP_CODE/MCNP611/Source_new/src/main.F90
+--- MCNP_CODE/MCNP611/Source/src/main.F90
++++ MCNP_CODE/MCNP611/Source_new/src/main.F90
+@@ -64 +64 @@
+-  use mcnp_env, only : HDPTH0, KOD, LODDAT, VER
++  use mcnp_env, only : hdpth0, kod, loddat, ver
+diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/mcnp_env.F90 MCNP_CODE/MCNP611/Source_new/src/mcnp_env.F90
+--- MCNP_CODE/MCNP611/Source/src/mcnp_env.F90
++++ MCNP_CODE/MCNP611/Source_new/src/mcnp_env.F90
+@@ -0,0 +1,46 @@
++
++  module mcnp_env
++    !
++    ! code & environment info for mcnp
++    !
++
++    character(len=8), parameter ::  kod            = KODE
++    character(len=5), parameter ::  ver            = VERS
++    character(len=20),parameter ::  thread         = THREAD
++    character(len=20),parameter ::  thread_version = TVERS
++    character(len=8), parameter ::  loddat         = LODDAT
++    character(len=*), parameter ::  hdpth0         = DPATH
++
++    public ::  print_build_info
++  CONTAINS
++    subroutine print_build_info( iunit )
++      integer, intent(in) :: iunit
++
++      write(iunit,*) '  +-----------------------------------------------------------'
++      write(iunit,*) '  | mcnp6 build information:'
++      write(iunit,*) '  |'
++      write(iunit,*) '  |   user          ='
++      write(iunit,*) '  |   host          ='
++      write(iunit,*) '  |   OS            ='
++      write(iunit,*) '  |   date          ='
++      write(iunit,*) '  |   time          ='
++      write(iunit,*) '  |'
++      write(iunit,*) '  |   CONFIG        ='
++      write(iunit,*) '  |'
++      write(iunit,*) '  |   f90           ='
++      write(iunit,*) '  |   OpenMP        ='
++      write(iunit,*) '  |   MPI           ='
++      write(iunit,*) '  |   MPI_ROOT      ='
++      write(iunit,*) '  |'
++      write(iunit,*) '  |   code          ='
++      write(iunit,*) '  |   version       ='
++      write(iunit,*) '  |'
++      write(iunit,*) '  |   thread name   ='
++      write(iunit,*) '  |   thread number ='
++      write(iunit,*) '  |'
++      write(iunit,*) '  |   datapath      ='
++      write(iunit,*) '  |'
++      write(iunit,*) '  |   fpp defs      ='
++      write(iunit,*) '  +-----------------------------------------------------------'
++    end subroutine print_build_info
++  end module mcnp_env
+diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/msgtsk.F90 MCNP_CODE/MCNP611/Source_new/src/msgtsk.F90
+--- MCNP_CODE/MCNP611/Source/src/msgtsk.F90
++++ MCNP_CODE/MCNP611/Source_new/src/msgtsk.F90
+@@ -80,0 +81 @@
++  use, intrinsic :: iso_c_binding
+@@ -308 +309,2 @@
+-    call setrngcgm(rang) 
++    ! call setrngcgm(rang) 
++    call setrngcgm(c_funloc(rang))

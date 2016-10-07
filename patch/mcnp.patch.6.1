@@ -1,0 +1,30 @@
+diff -rN '--unified=0' MCNP_CODE/MCNP6/Source/src/exemes.F90 MCNP_CODE/MCNP6/Source_new/src/exemes.F90
+--- MCNP_CODE/MCNP6/Source/src/exemes.F90
++++ MCNP_CODE/MCNP6/Source_new/src/exemes.F90
+@@ -273 +273 @@
+-      select case( hm(js) )
++      select case( trim(hm(js)) )
+diff -rN '--unified=0' MCNP_CODE/MCNP6/Source/src/main.F90 MCNP_CODE/MCNP6/Source_new/src/main.F90
+--- MCNP_CODE/MCNP6/Source/src/main.F90
++++ MCNP_CODE/MCNP6/Source_new/src/main.F90
+@@ -65 +65 @@
+-  use mcnp_env, only : HDPTH0, KOD, LODDAT, VER
++  use mcnp_env, only : hdpth0, kod, loddat, ver
+diff -rN '--unified=0' MCNP_CODE/MCNP6/Source/src/mcnp_env.F90 MCNP_CODE/MCNP6/Source_new/src/mcnp_env.F90
+--- MCNP_CODE/MCNP6/Source/src/mcnp_env.F90
++++ MCNP_CODE/MCNP6/Source_new/src/mcnp_env.F90
+@@ -0,0 +1,14 @@
++
++  module mcnp_env
++    !
++    ! code & environment info for mcnp
++    !
++
++    character(len=8), parameter ::  kod            = KODE
++    character(len=5), parameter ::  ver            = VERS
++    character(len=20),parameter ::  thread         = THREAD
++    character(len=20),parameter ::  thread_version = TVERS
++    character(len=8), parameter ::  loddat         = LODDAT
++    character(len=*), parameter ::  hdpth0         = DPATH
++
++  end module mcnp_env
