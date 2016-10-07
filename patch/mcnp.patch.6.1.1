@@ -1,33 +1,9 @@
-diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/Makefile MCNP_CODE/MCNP611/Source_new/Makefile
---- MCNP_CODE/MCNP611/Source/Makefile	2016-10-06 13:47:59.000000000 -0500
-+++ MCNP_CODE/MCNP611/Source_new/Makefile	2016-10-06 19:28:41.126287350 -0500
-@@ -86 +86 @@
--	@$(MAKE) -j $(GNUJ) $(EXEC) -k -s;
-+	@$(MAKE) -j $(GNUJ) $(EXEC) -k;
-@@ -102 +102 @@
--	@ $(MAKE) -s -C $(DATASRC_DIR)
-+	@ $(MAKE) -C $(DATASRC_DIR)
-@@ -106 +106 @@
--	@ $(MAKE) -s -C $(UTILS_DIR)
-+	@ $(MAKE) -C $(UTILS_DIR)
-@@ -143,2 +143,2 @@
--	@ $(MAKE) -s -C $(DATASRC_DIR)    clean
--	@ $(MAKE) -s -C $(MAIN_TEST_DIR)  clean
-+	@ $(MAKE) -C $(DATASRC_DIR)    clean
-+	@ $(MAKE) -C $(MAIN_TEST_DIR)  clean
-@@ -149,2 +149,2 @@
--	@ $(MAKE) -s -C $(DATASRC_DIR)    realclean
--	@ $(MAKE) -s -C $(UTILS_DIR)      realclean
-+	@ $(MAKE) -C $(DATASRC_DIR)    realclean
-+	@ $(MAKE) -C $(UTILS_DIR)      realclean
 diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/cgm_interface.F90 MCNP_CODE/MCNP611/Source_new/src/cgm_interface.F90
 --- MCNP_CODE/MCNP611/Source/src/cgm_interface.F90
 +++ MCNP_CODE/MCNP611/Source_new/src/cgm_interface.F90
-@@ -29,2 +29,4 @@
+@@ -29,2 +29,2 @@
 -      import :: c_double
 -      real (kind=c_double), external, bind(c) :: rngfunc
-+      ! import :: c_double
-+      ! real (kind=c_double), external, bind(c) :: rngfunc
 +      import :: c_funptr
 +      type(c_funptr), value :: rngfunc
 diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/exemes.F90 MCNP_CODE/MCNP611/Source_new/src/exemes.F90
@@ -41,13 +17,11 @@ diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/imcn.F90 MCNP_CODE/MCNP611/S
 +++ MCNP_CODE/MCNP611/Source_new/src/imcn.F90
 @@ -36,0 +37 @@
 +  use, intrinsic :: iso_c_binding
-@@ -2033 +2034,2 @@
+@@ -2033 +2034 @@
 -      call setrngcgm(rang)          
-+      ! call setrngcgm(rang)          
 +      call setrngcgm(c_funloc(rang))
-@@ -2299 +2301,2 @@
+@@ -2299 +2300 @@
 -      call setrngcgm(rang)          
-+      ! call setrngcgm(rang)          
 +      call setrngcgm(c_funloc(rang))
 diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/main.F90 MCNP_CODE/MCNP611/Source_new/src/main.F90
 --- MCNP_CODE/MCNP611/Source/src/main.F90
@@ -110,7 +84,6 @@ diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/msgtsk.F90 MCNP_CODE/MCNP611
 +++ MCNP_CODE/MCNP611/Source_new/src/msgtsk.F90
 @@ -80,0 +81 @@
 +  use, intrinsic :: iso_c_binding
-@@ -308 +309,2 @@
+@@ -308 +309 @@
 -    call setrngcgm(rang) 
-+    ! call setrngcgm(rang) 
 +    call setrngcgm(c_funloc(rang))
