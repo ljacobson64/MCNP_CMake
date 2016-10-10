@@ -1,3 +1,15 @@
+diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/import/frgcpa_.inc MCNP_CODE/MCNP611/Source_new/import/frgcpa_.inc
+--- MCNP_CODE/MCNP611/Source/import/frgcpa_.inc	2016-10-07 10:32:08.045931241 -0500
++++ MCNP_CODE/MCNP611/Source_new/import/frgcpa_.inc	2016-10-10 16:33:37.390099879 -0500
+@@ -3 +3 @@
+-!$OMP THREADPRIVATE (/FRGCPA_/)
++! !$OMP THREADPRIVATE (/FRGCPA_/)
+diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/import/frgspa_.inc MCNP_CODE/MCNP611/Source_new/import/frgspa_.inc
+--- MCNP_CODE/MCNP611/Source/import/frgspa_.inc	2016-10-07 10:32:08.045931241 -0500
++++ MCNP_CODE/MCNP611/Source_new/import/frgspa_.inc	2016-10-10 16:33:38.789977822 -0500
+@@ -3 +3 @@
+-!$OMP THREADPRIVATE (/FRGSPA_/)
++! !$OMP THREADPRIVATE (/FRGSPA_/)
 diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/cgm_interface.F90 MCNP_CODE/MCNP611/Source_new/src/cgm_interface.F90
 --- MCNP_CODE/MCNP611/Source/src/cgm_interface.F90
 +++ MCNP_CODE/MCNP611/Source_new/src/cgm_interface.F90
@@ -87,3 +99,17 @@ diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/msgtsk.F90 MCNP_CODE/MCNP611
 @@ -308 +309 @@
 -    call setrngcgm(rang) 
 +    call setrngcgm(c_funloc(rang))
+diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/pblcom.F90 MCNP_CODE/MCNP611/Source_new/src/pblcom.F90
+--- MCNP_CODE/MCNP611/Source/src/pblcom.F90
++++ MCNP_CODE/MCNP611/Source_new/src/pblcom.F90
+@@ -178,4 +178,6 @@
+-  common /pblcom_thread/ pbl, pbl_src, pbl_stack
+-  common /pblcom_thread/ udt, udt_stack
+-  common /pblcom_thread/ pbl_in_use, udt_in_use, is_uncollided_part
+-  !$OMP THREADPRIVATE( /pblcom_thread/ )
++  common /pblcom_thread1/ pbl, pbl_src, pbl_stack
++  common /pblcom_thread2/ udt, udt_stack
++  common /pblcom_thread3/ pbl_in_use, udt_in_use, is_uncollided_part
++  !$OMP THREADPRIVATE( /pblcom_thread1/ )
++  !$OMP THREADPRIVATE( /pblcom_thread2/ )
++  !$OMP THREADPRIVATE( /pblcom_thread3/ )
