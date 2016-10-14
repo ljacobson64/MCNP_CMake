@@ -18,6 +18,16 @@ diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/cgm_interface.F90 MCNP_CODE/
 -      real (kind=c_double), external, bind(c) :: rngfunc
 +      import :: c_funptr
 +      type(c_funptr), value :: rngfunc
+diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/charged_particle_history.F90 MCNP_CODE/MCNP611/Source_new/src/charged_particle_history.F90
+--- MCNP_CODE/MCNP611/Source/src/charged_particle_history.F90
++++ MCNP_CODE/MCNP611/Source_new/src/charged_particle_history.F90
+@@ -594 +594,5 @@
+-          call uplpos(xt,uold,pbl%i%lev,D,v,0)
++          if (am /= one) then
++            call uplpos(xt,uold,pbl%i%lev,D,v,1)
++          else
++            call uplpos(xt,uold,pbl%i%lev,D,v,0)
++          endif
 diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/exemes.F90 MCNP_CODE/MCNP611/Source_new/src/exemes.F90
 --- MCNP_CODE/MCNP611/Source/src/exemes.F90
 +++ MCNP_CODE/MCNP611/Source_new/src/exemes.F90

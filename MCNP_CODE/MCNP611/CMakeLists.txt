@@ -145,5 +145,5 @@ if (MPI_BUILD)
   target_link_libraries(${MCNP_EXEC} ${MPI_Fortran_LIBRARIES})
 endif (MPI_BUILD)
 
-# Install MCNP6
+# Install MCNP611
 install(TARGETS ${MCNP_EXEC} DESTINATION ${INSTALL_BIN_DIR})

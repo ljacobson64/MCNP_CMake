@@ -10,6 +10,16 @@ diff -rN '--unified=0' MCNP_CODE/MCNP6/Source/import/frgspa_.inc MCNP_CODE/MCNP6
 @@ -3 +3 @@
 -!$OMP THREADPRIVATE (/FRGSPA_/)
 +! !$OMP THREADPRIVATE (/FRGSPA_/)
+diff -rN '--unified=0' MCNP_CODE/MCNP6/Source/src/charged_particle_history.F90 MCNP_CODE/MCNP6/Source_new/src/charged_particle_history.F90
+--- MCNP_CODE/MCNP6/Source/src/charged_particle_history.F90
++++ MCNP_CODE/MCNP6/Source_new/src/charged_particle_history.F90
+@@ -580 +580,5 @@
+-          call uplpos(xt,uold,pbl%i%lev,D,v,0)
++          if (am /= one) then
++            call uplpos(xt,uold,pbl%i%lev,D,v,1)
++          else
++            call uplpos(xt,uold,pbl%i%lev,D,v,0)
++          endif
 diff -rN '--unified=0' MCNP_CODE/MCNP6/Source/src/exemes.F90 MCNP_CODE/MCNP6/Source_new/src/exemes.F90
 --- MCNP_CODE/MCNP6/Source/src/exemes.F90
 +++ MCNP_CODE/MCNP6/Source_new/src/exemes.F90
