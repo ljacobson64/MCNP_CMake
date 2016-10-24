@@ -1,23 +1,27 @@
 diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/import/frgcpa_.inc MCNP_CODE/MCNP611/Source_new/import/frgcpa_.inc
---- MCNP_CODE/MCNP611/Source/import/frgcpa_.inc	2016-10-07 10:32:08.045931241 -0500
-+++ MCNP_CODE/MCNP611/Source_new/import/frgcpa_.inc	2016-10-10 16:33:37.390099879 -0500
-@@ -3 +3 @@
--!$OMP THREADPRIVATE (/FRGCPA_/)
-+! !$OMP THREADPRIVATE (/FRGCPA_/)
+--- MCNP_CODE/MCNP611/Source/import/frgcpa_.inc
++++ MCNP_CODE/MCNP611/Source_new/import/frgcpa_.inc
+@@ -2,0 +3 @@
++#ifdef __INTEL_COMPILER
+@@ -3,0 +5 @@
++#endif
 diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/import/frgspa_.inc MCNP_CODE/MCNP611/Source_new/import/frgspa_.inc
---- MCNP_CODE/MCNP611/Source/import/frgspa_.inc	2016-10-07 10:32:08.045931241 -0500
-+++ MCNP_CODE/MCNP611/Source_new/import/frgspa_.inc	2016-10-10 16:33:38.789977822 -0500
-@@ -3 +3 @@
--!$OMP THREADPRIVATE (/FRGSPA_/)
-+! !$OMP THREADPRIVATE (/FRGSPA_/)
+--- MCNP_CODE/MCNP611/Source/import/frgspa_.inc
++++ MCNP_CODE/MCNP611/Source_new/import/frgspa_.inc
+@@ -2,0 +3 @@
++#ifdef __INTEL_COMPILER
+@@ -3,0 +5 @@
++#endif
 diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/cgm_interface.F90 MCNP_CODE/MCNP611/Source_new/src/cgm_interface.F90
 --- MCNP_CODE/MCNP611/Source/src/cgm_interface.F90
 +++ MCNP_CODE/MCNP611/Source_new/src/cgm_interface.F90
-@@ -29,2 +29,2 @@
--      import :: c_double
--      real (kind=c_double), external, bind(c) :: rngfunc
+@@ -28,0 +29,4 @@
++#ifdef __INTEL_COMPILER >= 1600
 +      import :: c_funptr
 +      type(c_funptr), value :: rngfunc
++#else
+@@ -30,0 +35 @@
++#endif
 diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/charged_particle_history.F90 MCNP_CODE/MCNP611/Source_new/src/charged_particle_history.F90
 --- MCNP_CODE/MCNP611/Source/src/charged_particle_history.F90
 +++ MCNP_CODE/MCNP611/Source_new/src/charged_particle_history.F90
@@ -37,14 +41,24 @@ diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/exemes.F90 MCNP_CODE/MCNP611
 diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/imcn.F90 MCNP_CODE/MCNP611/Source_new/src/imcn.F90
 --- MCNP_CODE/MCNP611/Source/src/imcn.F90
 +++ MCNP_CODE/MCNP611/Source_new/src/imcn.F90
-@@ -36,0 +37 @@
+@@ -36,0 +37,3 @@
++#ifdef __INTEL_COMPILER >= 1600
 +  use, intrinsic :: iso_c_binding
-@@ -2033 +2034 @@
++#endif
+@@ -2033 +2036,5 @@
 -      call setrngcgm(rang)          
++#ifdef __INTEL_COMPILER >= 1600
 +      call setrngcgm(c_funloc(rang))
-@@ -2299 +2300 @@
++#else
++      call setrngcgm(rang)
++#endif
+@@ -2299 +2306,5 @@
 -      call setrngcgm(rang)          
++#ifdef __INTEL_COMPILER >= 1600
 +      call setrngcgm(c_funloc(rang))
++#else
++      call setrngcgm(rang)
++#endif
 diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/main.F90 MCNP_CODE/MCNP611/Source_new/src/main.F90
 --- MCNP_CODE/MCNP611/Source/src/main.F90
 +++ MCNP_CODE/MCNP611/Source_new/src/main.F90
@@ -104,11 +118,17 @@ diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/mcnp_env.F90 MCNP_CODE/MCNP6
 diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/msgtsk.F90 MCNP_CODE/MCNP611/Source_new/src/msgtsk.F90
 --- MCNP_CODE/MCNP611/Source/src/msgtsk.F90
 +++ MCNP_CODE/MCNP611/Source_new/src/msgtsk.F90
-@@ -80,0 +81 @@
+@@ -80,0 +81,3 @@
++#ifdef __INTEL_COMPILER >= 1600
 +  use, intrinsic :: iso_c_binding
-@@ -308 +309 @@
++#endif
+@@ -308 +311,5 @@
 -    call setrngcgm(rang) 
++#ifdef __INTEL_COMPILER >= 1600
 +    call setrngcgm(c_funloc(rang))
++#else
++    call setrngcgm(rang)
++#endif
 diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/pblcom.F90 MCNP_CODE/MCNP611/Source_new/src/pblcom.F90
 --- MCNP_CODE/MCNP611/Source/src/pblcom.F90
 +++ MCNP_CODE/MCNP611/Source_new/src/pblcom.F90
