@@ -1,22 +1,20 @@
 diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/import/frgcpa_.inc MCNP_CODE/MCNP611/Source_new/import/frgcpa_.inc
 --- MCNP_CODE/MCNP611/Source/import/frgcpa_.inc
 +++ MCNP_CODE/MCNP611/Source_new/import/frgcpa_.inc
-@@ -2,0 +3 @@
-+#ifdef __INTEL_COMPILER
-@@ -3,0 +5 @@
-+#endif
+@@ -3 +3 @@
+-!$OMP THREADPRIVATE (/FRGCPA_/)
++! !$OMP THREADPRIVATE (/FRGCPA_/)
 diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/import/frgspa_.inc MCNP_CODE/MCNP611/Source_new/import/frgspa_.inc
 --- MCNP_CODE/MCNP611/Source/import/frgspa_.inc
 +++ MCNP_CODE/MCNP611/Source_new/import/frgspa_.inc
-@@ -2,0 +3 @@
-+#ifdef __INTEL_COMPILER
-@@ -3,0 +5 @@
-+#endif
+@@ -3 +3 @@
+-!$OMP THREADPRIVATE (/FRGSPA_/)
++! !$OMP THREADPRIVATE (/FRGSPA_/)
 diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/cgm_interface.F90 MCNP_CODE/MCNP611/Source_new/src/cgm_interface.F90
 --- MCNP_CODE/MCNP611/Source/src/cgm_interface.F90
 +++ MCNP_CODE/MCNP611/Source_new/src/cgm_interface.F90
 @@ -28,0 +29,4 @@
-+#ifdef __INTEL_COMPILER >= 1600
++#if __INTEL_COMPILER >= 1600
 +      import :: c_funptr
 +      type(c_funptr), value :: rngfunc
 +#else
@@ -42,19 +40,19 @@ diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/imcn.F90 MCNP_CODE/MCNP611/S
 --- MCNP_CODE/MCNP611/Source/src/imcn.F90
 +++ MCNP_CODE/MCNP611/Source_new/src/imcn.F90
 @@ -36,0 +37,3 @@
-+#ifdef __INTEL_COMPILER >= 1600
++#if __INTEL_COMPILER >= 1600
 +  use, intrinsic :: iso_c_binding
 +#endif
 @@ -2033 +2036,5 @@
 -      call setrngcgm(rang)          
-+#ifdef __INTEL_COMPILER >= 1600
++#if __INTEL_COMPILER >= 1600
 +      call setrngcgm(c_funloc(rang))
 +#else
 +      call setrngcgm(rang)
 +#endif
 @@ -2299 +2306,5 @@
 -      call setrngcgm(rang)          
-+#ifdef __INTEL_COMPILER >= 1600
++#if __INTEL_COMPILER >= 1600
 +      call setrngcgm(c_funloc(rang))
 +#else
 +      call setrngcgm(rang)
@@ -119,12 +117,12 @@ diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/msgtsk.F90 MCNP_CODE/MCNP611
 --- MCNP_CODE/MCNP611/Source/src/msgtsk.F90
 +++ MCNP_CODE/MCNP611/Source_new/src/msgtsk.F90
 @@ -80,0 +81,3 @@
-+#ifdef __INTEL_COMPILER >= 1600
++#if __INTEL_COMPILER >= 1600
 +  use, intrinsic :: iso_c_binding
 +#endif
 @@ -308 +311,5 @@
 -    call setrngcgm(rang) 
-+#ifdef __INTEL_COMPILER >= 1600
++#if __INTEL_COMPILER >= 1600
 +    call setrngcgm(c_funloc(rang))
 +#else
 +    call setrngcgm(rang)

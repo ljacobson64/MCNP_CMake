@@ -1,17 +1,15 @@
 diff -rN '--unified=0' MCNP_CODE/MCNP6/Source/import/frgcpa_.inc MCNP_CODE/MCNP6/Source_new/import/frgcpa_.inc
 --- MCNP_CODE/MCNP6/Source/import/frgcpa_.inc
 +++ MCNP_CODE/MCNP6/Source_new/import/frgcpa_.inc
-@@ -2,0 +3 @@
-+#ifdef __INTEL_COMPILER
-@@ -3,0 +5 @@
-+#endif
+@@ -3 +3 @@
+-!$OMP THREADPRIVATE (/FRGCPA_/)
++! !$OMP THREADPRIVATE (/FRGCPA_/)
 diff -rN '--unified=0' MCNP_CODE/MCNP6/Source/import/frgspa_.inc MCNP_CODE/MCNP6/Source_new/import/frgspa_.inc
 --- MCNP_CODE/MCNP6/Source/import/frgspa_.inc
 +++ MCNP_CODE/MCNP6/Source_new/import/frgspa_.inc
-@@ -2,0 +3 @@
-+#ifdef __INTEL_COMPILER
-@@ -3,0 +5 @@
-+#endif
+@@ -3 +3 @@
+-!$OMP THREADPRIVATE (/FRGSPA_/)
++! !$OMP THREADPRIVATE (/FRGSPA_/)
 diff -rN '--unified=0' MCNP_CODE/MCNP6/Source/src/charged_particle_history.F90 MCNP_CODE/MCNP6/Source_new/src/charged_particle_history.F90
 --- MCNP_CODE/MCNP6/Source/src/charged_particle_history.F90
 +++ MCNP_CODE/MCNP6/Source_new/src/charged_particle_history.F90
