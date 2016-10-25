@@ -142,6 +142,10 @@ endif (MCNP_PLOT)
 if (MPI_BUILD)
   target_link_libraries(${MCNP_EXEC} ${MPI_LIBRARIES})
 endif (MPI_BUILD)
+if (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
+  set(CMAKE_C_IMPLICIT_LINK_LIBRARIES "stdc++")
+  set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "stdc++")
+endif (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
 
 # Install MCNP5
 install(TARGETS ${MCNP_EXEC} DESTINATION ${INSTALL_BIN_DIR})
