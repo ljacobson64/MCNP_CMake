@@ -14,6 +14,6 @@ for i in $(seq 0 2); do
   diff -rN "--unified=0" MCNP_CODE/${folder}/Source MCNP_CODE/${folder}/Source_new > temp
   mv MCNP_CODE/${folder}/Source      MCNP_CODE/${folder}/Source_orig
   mv MCNP_CODE/${folder}/Source_new  MCNP_CODE/${folder}/Source
-  sed -e "s/.F90\t.*/.F90/" -e "s/.inc\t.*/.inc/" temp > patch/mcnp.patch.${version}
+  sed -e "s/.F90\t.*/.F90/" -e "s/.inc\t.*/.inc/" temp > patch/mcnp.${version}.patch
   rm -f temp
 done
