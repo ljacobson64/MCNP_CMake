@@ -44,13 +44,22 @@ endif (${MCNP_VERSION} STREQUAL Unknown)
 message(STATUS "MCNP611 version ${MCNP_VERSION} source files found")
 
 # C compiler flags
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
+if (${CMAKE_C_COMPILER_ID} STREQUAL Intel)
+  set(CMAKE_C_FLAGS "${CMAKE_Fortran_FLAGS} -mcmodel=medium")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pc64")
+else ()
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
+endif (${CMAKE_C_COMPILER_ID} STREQUAL Intel)
 
 # Fortran compiler flags
 if (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -no-vec")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -heap-arrays 1024")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -traceback")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -mcmodel=medium")
+  #set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -static-intel")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -pc64")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -static-intel")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -diag-disable 8290,8291,8577")
 else ()
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -m64")
@@ -148,6 +157,7 @@ endif (MPI_BUILD)
 if (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
   set(CMAKE_C_IMPLICIT_LINK_LIBRARIES "stdc++")
   set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "stdc++")
+  set(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES "")
 endif (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
 
 # Install MCNP611

@@ -28,20 +28,16 @@ export LD_LIBRARY_PATH=${INTEL_ROOT}/linux/compiler/lib/intel64:${PATH}
 export            PATH=${MPI_ROOT}/bin:${PATH}
 export LD_LIBRARY_PATH=${MPI_ROOT}/lib:${LD_LIBRARY_PATH}
 
+CC=/usr/bin/gcc
+CXX=/usr/bin/g++
 if [[ ${COMP} == gcc ]]; then
-  CC=/usr/bin/gcc
-  CXX=/usr/bin/g++
+  #CC=/usr/bin/gcc
+  #CXX=/usr/bin/g++
   FC=/usr/bin/gfortran
-  MPICC=/usr/bin/mpicc
-  MPICXX=/usr/bin/mpic++
-  MPIFC=/usr/bin/mpif90
 elif [[ ${COMP} == intel ]]; then
-  CC=`which icc`
-  CXX=`which icpc`
+  #CC=`which icc`
+  #CXX=`which icpc`
   FC=`which ifort`
-  MPICC=`which mpicc`
-  MPICXX=`which mpicpc`
-  MPIFC=`which mpifort`
 fi
 
 cmake_string=
@@ -53,9 +49,10 @@ cmake_string+=" "-DBUILD_MCNP611=ON
 
 cmake_string+=" "-DMCNP_PLOT=ON
 cmake_string+=" "-DOPENMP_BUILD=ON
-#cmake_string+=" "-DMPI_BUILD=ON
+cmake_string+=" "-DMPI_BUILD=ON
 
 #cmake_string+=" "-DSTATIC_LIB=ON
+#cmake_string+=" "-DCMAKE_BUILD_TYPE=Debug
 cmake_string+=" "-DCMAKE_C_COMPILER=${CC}
 cmake_string+=" "-DCMAKE_CXX_COMPILER=${CXX}
 cmake_string+=" "-DCMAKE_Fortran_COMPILER=${FC}

@@ -6,11 +6,47 @@ if (CMAKE_MAJOR_VERSION GREATER 3 OR CMAKE_MAJOR_VERSION EQUAL 3)
   cmake_policy(SET CMP0040 OLD)
 endif (CMAKE_MAJOR_VERSION GREATER 3 OR CMAKE_MAJOR_VERSION EQUAL 3)
 
+enable_language(Fortran)
+
 # Installation directories
 set(INSTALL_BIN_DIR     bin     CACHE PATH "Installation directory for executables")
 set(INSTALL_LIB_DIR     lib     CACHE PATH "Installation directory for libraries")
 set(INSTALL_INCLUDE_DIR include CACHE PATH "Installation directory for header files")
 set(INSTALL_SHARE_DIR   share   CACHE PATH "Installation directory for other files")
+
+# Default to Release build
+if (NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif (NOT CMAKE_BUILD_TYPE)
+
+# Set optimization flags: only allow -O1 if using Intel
+set(CMAKE_C_FLAGS_DEBUG "-O0 -g")
+set(CMAKE_C_FLAGS_MINSIZEREL "-Os")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
+set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os")
+set(CMAKE_Fortran_FLAGS_DEBUG "-O0 -g")
+set(CMAKE_Fortran_FLAGS_MINSIZEREL "-Os")
+if (${CMAKE_C_COMPILER_ID} STREQUAL Intel)
+  set(CMAKE_C_FLAGS_RELEASE "-O1")
+  set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O1 -g")
+else ()
+  set(CMAKE_C_FLAGS_RELEASE "-O0")
+  set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O0 -g")
+endif (${CMAKE_C_COMPILER_ID} STREQUAL Intel)
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL Intel)
+  set(CMAKE_CXX_FLAGS_RELEASE "-O1")
+  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O1 -g")
+else ()
+  set(CMAKE_CXX_FLAGS_RELEASE "-O0")
+  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O0 -g")
+endif (${CMAKE_CXX_COMPILER_ID} STREQUAL Intel)
+if (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
+  set(CMAKE_Fortran_FLAGS_RELEASE "-O1")
+  set(CMAKE_Fortran_FLAGS_RELWITHDEBINFO "-O1 -g")
+else ()
+  set(CMAKE_Fortran_FLAGS_RELEASE "-O0")
+  set(CMAKE_Fortran_FLAGS_RELWITHDEBINFO "-O0 -g")
+endif (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
 
 # Determine if we're building static libraries
 if (STATIC_LIB)
