@@ -45,10 +45,10 @@ message(STATUS "MCNP611 version ${MCNP_VERSION} source files found")
 
 # C compiler flags
 if (${CMAKE_C_COMPILER_ID} STREQUAL Intel)
-  set(CMAKE_C_FLAGS "${CMAKE_Fortran_FLAGS} -mcmodel=medium")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pc64")
 else ()
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
+  set(CMAKE_C_FLAGS "${CMAKE_Fortran_FLAGS} -mcmodel=medium")
 endif (${CMAKE_C_COMPILER_ID} STREQUAL Intel)
 
 # Fortran compiler flags
@@ -56,11 +56,10 @@ if (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -no-vec")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -heap-arrays 1024")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -traceback")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -mcmodel=medium")
-  #set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -static-intel")
+  #set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -mcmodel=medium")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -pc64")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -diag-disable 8290,8291,8577")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8")
 else ()
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -m64")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -mieee-fp")
@@ -68,6 +67,11 @@ else ()
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fno-sign-zero")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-real-8")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-double-8")
+endif (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
+
+# Linker flags
+if (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-intel")
 endif (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
 
 # Include directories
