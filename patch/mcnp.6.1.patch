@@ -10,6 +10,30 @@ diff -rN '--unified=0' MCNP_CODE/MCNP6/Source/import/frgspa_.inc MCNP_CODE/MCNP6
 @@ -3 +3 @@
 -!$OMP THREADPRIVATE (/FRGSPA_/)
 +! !$OMP THREADPRIVATE (/FRGSPA_/)
+diff -rN '--unified=0' MCNP_CODE/MCNP6/Source/src/burn_out.F90 MCNP_CODE/MCNP6/Source_new/src/burn_out.F90
+--- MCNP_CODE/MCNP6/Source/src/burn_out.F90
++++ MCNP_CODE/MCNP6/Source_new/src/burn_out.F90
+@@ -418 +418 @@
+-          write (iuo,'(/,a,i5)') ' Material #:',nmt(matb(iq))
++          write (iuo,'(/,a,i8)') ' Material #:',nmt(matb(iq))
+@@ -436 +436 @@
+-      write (iuo,'(//,a,i4,a,es11.4,a)') &
++      write (iuo,'(//,a,i8,a,es11.4,a)') &
+@@ -441 +441 @@
+-      write (iuo,'(//,a,i4,a,es11.4,a)') ' nuclide data are sorted by decreasing activity for material', &
++      write (iuo,'(//,a,i8,a,es11.4,a)') ' nuclide data are sorted by decreasing activity for material', &
+@@ -445 +445 @@
+-      write (iuo,'(//,a,i4,a,es11.4,a)') ' nuclide data are sorted by decreasing specific activity for material', &
++      write (iuo,'(//,a,i8,a,es11.4,a)') ' nuclide data are sorted by decreasing specific activity for material', &
+@@ -449 +449 @@
+-      write (iuo,'(//,a,i4,a,es11.4,a)') ' nuclide data are sorted by increasing zaid for material', &
++      write (iuo,'(//,a,i8,a,es11.4,a)') ' nuclide data are sorted by increasing zaid for material', &
+@@ -454 +454 @@
+-      write (iuo,'(/a,i4,a,i3,a,es9.3,a,es9.3,a,//,a,/,a)')                                &
++      write (iuo,'(/a,i8,a,i3,a,es9.3,a,es9.3,a,//,a,/,a)')                                &
+@@ -468 +468 @@
+-      write (iuo,'(/a,i4,a,i3,a,1p,e9.3,a,a,e9.3,a,//,a,/,a)') &
++      write (iuo,'(/a,i8,a,i3,a,1p,e9.3,a,a,e9.3,a,//,a,/,a)') &
 diff -rN '--unified=0' MCNP_CODE/MCNP6/Source/src/charged_particle_history.F90 MCNP_CODE/MCNP6/Source_new/src/charged_particle_history.F90
 --- MCNP_CODE/MCNP6/Source/src/charged_particle_history.F90
 +++ MCNP_CODE/MCNP6/Source_new/src/charged_particle_history.F90
