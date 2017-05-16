@@ -141,3 +141,15 @@ diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/pblcom.F90 MCNP_CODE/MCNP611
 +  !$OMP THREADPRIVATE( /pblcom_thread1/ )
 +  !$OMP THREADPRIVATE( /pblcom_thread2/ )
 +  !$OMP THREADPRIVATE( /pblcom_thread3/ )
+diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/torus.F90 MCNP_CODE/MCNP611/Source_new/src/torus.F90
+--- MCNP_CODE/MCNP611/Source/src/torus.F90
++++ MCNP_CODE/MCNP611/Source_new/src/torus.F90
+@@ -86 +86,7 @@
+-      if( abs(t3)<=z0 )  go to 40
++      if( abs(t3)<=z0 ) then
++        if (xx(m) < 0.) then
++          cycle DO_60
++        else
++          go to 40
++        endif
++      endif

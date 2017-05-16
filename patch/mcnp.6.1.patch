@@ -50,6 +50,18 @@ diff -rN '--unified=0' MCNP_CODE/MCNP6/Source/src/mcnp_env.F90 MCNP_CODE/MCNP6/S
 +    character(len=*), parameter ::  hdpth0         = DPATH
 +
 +  end module mcnp_env
+diff -rN '--unified=0' MCNP_CODE/MCNP6/Source/src/torus.F90 MCNP_CODE/MCNP6/Source_new/src/torus.F90
+--- MCNP_CODE/MCNP6/Source/src/torus.F90
++++ MCNP_CODE/MCNP6/Source_new/src/torus.F90
+@@ -90 +90,7 @@
+-      if( abs(t3)<=z0 )  go to 40
++      if( abs(t3)<=z0 ) then
++        if (xx(m) < 0.) then
++          cycle DO_60
++        else
++          go to 40
++        endif
++      endif
 diff -rN '--unified=0' MCNP_CODE/MCNP6/Source/src/trfsrf.F90 MCNP_CODE/MCNP6/Source_new/src/trfsrf.F90
 --- MCNP_CODE/MCNP6/Source/src/trfsrf.F90
 +++ MCNP_CODE/MCNP6/Source_new/src/trfsrf.F90
