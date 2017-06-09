@@ -6,6 +6,11 @@ if (CMAKE_MAJOR_VERSION GREATER 3 OR CMAKE_MAJOR_VERSION EQUAL 3)
   cmake_policy(SET CMP0040 OLD)
 endif (CMAKE_MAJOR_VERSION GREATER 3 OR CMAKE_MAJOR_VERSION EQUAL 3)
 
+macro(create_symlink_bin exec exec_sym)
+  install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${exec} ${exec_sym} \
+                                WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}/${INSTALL_BIN_DIR})")
+endmacro(create_symlink_bin exec exec_sym)
+
 enable_language(Fortran)
 
 # Installation directories
@@ -28,7 +33,6 @@ if (NOT ${CMAKE_BUILD_TYPE})
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -O1")
 endif (NOT ${CMAKE_BUILD_TYPE})
-
 
 # Determine if we're building static executables
 option(BUILD_STATIC "Build static executables" OFF)

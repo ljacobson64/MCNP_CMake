@@ -133,9 +133,11 @@ endif (MPI_BUILD)
 
 # Add the executable
 if (MPI_BUILD)
-  set(MCNP_EXEC "mcnp6.mpi")
+  set(MCNP_EXEC "mcnp${MCNP_VERSION}.mpi")
+  set(MCNP_EXEC_SYM "mcnp6.mpi")
 else ()
-  set(MCNP_EXEC "mcnp6")
+  set(MCNP_EXEC "mcnp${MCNP_VERSION}")
+  set(MCNP_EXEC_SYM "mcnp6")
 endif (MPI_BUILD)
 add_executable(${MCNP_EXEC} ${MCNP_SRC_FILES})
 
@@ -152,3 +154,6 @@ endif (MPI_BUILD)
 
 # Install MCNP6
 install(TARGETS ${MCNP_EXEC} DESTINATION ${INSTALL_BIN_DIR})
+if (NOT BUILD_MCNP611)
+  create_symlink_bin(${MCNP_EXEC} ${MCNP_EXEC_SYM})
+endif (NOT BUILD_MCNP611)

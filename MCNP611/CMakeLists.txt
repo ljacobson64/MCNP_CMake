@@ -34,7 +34,7 @@ if ("/${MCNP_SRC_FILES};" MATCHES "/cerenkov_mod.F90;" AND
     "/${MCNP_SRC_FILES};" MATCHES "/cgm_interface.F90;" AND
     "/${MCNP_SRC_FILES};" MATCHES "/parse_ichoic.F90;" AND
     "/${MCNP_SRC_FILES};" MATCHES "/reflect_light.F90;")
-  set(MCNP_VERSION 6.1.1)
+  set(MCNP_VERSION 6.1.1beta)
 endif ()
 if (${MCNP_VERSION} STREQUAL Unknown)
   message(FATAL_ERROR "MCNP611 source files not found in MCNP611/Source/src")
@@ -140,9 +140,11 @@ endif (MPI_BUILD)
 
 # Add the executable
 if (MPI_BUILD)
-  set(MCNP_EXEC "mcnp611.mpi")
+  set(MCNP_EXEC "mcnp${MCNP_VERSION}.mpi")
+  set(MCNP_EXEC_SYM "mcnp6.mpi")
 else ()
-  set(MCNP_EXEC "mcnp611")
+  set(MCNP_EXEC "mcnp${MCNP_VERSION}")
+  set(MCNP_EXEC_SYM "mcnp6")
 endif (MPI_BUILD)
 add_executable(${MCNP_EXEC} ${MCNP_SRC_FILES})
 
@@ -159,3 +161,4 @@ endif (MPI_BUILD)
 
 # Install MCNP611
 install(TARGETS ${MCNP_EXEC} DESTINATION ${INSTALL_BIN_DIR})
+create_symlink_bin(${MCNP_EXEC} ${MCNP_EXEC_SYM})
