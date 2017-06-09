@@ -1,7 +1,5 @@
 message(STATUS "Building MCNP6")
 
-enable_language(Fortran)
-
 # Get date and time
 # modifed from http://www.cmake.org/pipermail/cmake/2010-November/041034.html
 macro (DATETIME RESULT)
@@ -151,11 +149,6 @@ endif (MCNP_PLOT)
 if (MPI_BUILD)
   target_link_libraries(${MCNP_EXEC} ${MPI_Fortran_LIBRARIES})
 endif (MPI_BUILD)
-if (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
-  set(CMAKE_C_IMPLICIT_LINK_LIBRARIES "stdc++")
-  set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "stdc++")
-  set(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES "")
-endif (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
 
 # Install MCNP6
 install(TARGETS ${MCNP_EXEC} DESTINATION ${INSTALL_BIN_DIR})

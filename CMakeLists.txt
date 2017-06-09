@@ -29,22 +29,21 @@ if (NOT ${CMAKE_BUILD_TYPE})
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -O1")
 endif (NOT ${CMAKE_BUILD_TYPE})
 
-# Determine if we're building static libraries
-if (STATIC_LIB)
-  set(LIB_TYPE "STATIC")
-  set(BUILD_SHARED_LIBRARIES OFF)
+
+# Determine if we're building static executables
+option(BUILD_STATIC "Build static executables" OFF)
+if (BUILD_STATIC)
   set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
 else ()
-  set(LIB_TYPE "SHARED")
-endif (STATIC_LIB)
+  set(BUILD_SHARED ON)
+endif (BUILD_STATIC)
 
 # Figure out which physics codes to build
 if (BUILD_ALL)
   set(BUILD_MCNP5 ON)
   set(BUILD_MCNP6 ON)
   set(BUILD_MCNP611 ON)
-  set(BUILD_MCNPX ON)
 endif (BUILD_ALL)
 
 # Build MCNP
@@ -57,6 +56,3 @@ endif (BUILD_MCNP6)
 if (BUILD_MCNP611)
   add_subdirectory(MCNP611)
 endif (BUILD_MCNP611)
-if (BUILD_MCNPX)
-  add_subdirectory(MCNPX)
-endif (BUILD_MCNPX)
