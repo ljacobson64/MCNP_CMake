@@ -1,18 +1,18 @@
-diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/import/frgcpa_.inc MCNP_CODE/MCNP611/Source_new/import/frgcpa_.inc
---- MCNP_CODE/MCNP611/Source/import/frgcpa_.inc
-+++ MCNP_CODE/MCNP611/Source_new/import/frgcpa_.inc
+diff -rN '--unified=0' MCNP611/Source/import/frgcpa_.inc MCNP611/Source_new/import/frgcpa_.inc
+--- MCNP611/Source/import/frgcpa_.inc
++++ MCNP611/Source_new/import/frgcpa_.inc
 @@ -3 +3 @@
 -!$OMP THREADPRIVATE (/FRGCPA_/)
 +! !$OMP THREADPRIVATE (/FRGCPA_/)
-diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/import/frgspa_.inc MCNP_CODE/MCNP611/Source_new/import/frgspa_.inc
---- MCNP_CODE/MCNP611/Source/import/frgspa_.inc
-+++ MCNP_CODE/MCNP611/Source_new/import/frgspa_.inc
+diff -rN '--unified=0' MCNP611/Source/import/frgspa_.inc MCNP611/Source_new/import/frgspa_.inc
+--- MCNP611/Source/import/frgspa_.inc
++++ MCNP611/Source_new/import/frgspa_.inc
 @@ -3 +3 @@
 -!$OMP THREADPRIVATE (/FRGSPA_/)
 +! !$OMP THREADPRIVATE (/FRGSPA_/)
-diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/burn_out.F90 MCNP_CODE/MCNP611/Source_new/src/burn_out.F90
---- MCNP_CODE/MCNP611/Source/src/burn_out.F90
-+++ MCNP_CODE/MCNP611/Source_new/src/burn_out.F90
+diff -rN '--unified=0' MCNP611/Source/src/burn_out.F90 MCNP611/Source_new/src/burn_out.F90
+--- MCNP611/Source/src/burn_out.F90
++++ MCNP611/Source_new/src/burn_out.F90
 @@ -418 +418 @@
 -          write (iuo,'(/,a,i5)') ' Material #:',nmt(matb(iq))
 +          write (iuo,'(/,a,i8)') ' Material #:',nmt(matb(iq))
@@ -34,9 +34,9 @@ diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/burn_out.F90 MCNP_CODE/MCNP6
 @@ -468 +468 @@
 -      write (iuo,'(/a,i4,a,i3,a,1p,e9.3,a,a,e9.3,a,//,a,/,a)') &
 +      write (iuo,'(/a,i8,a,i3,a,1p,e9.3,a,a,e9.3,a,//,a,/,a)') &
-diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/cgm_interface.F90 MCNP_CODE/MCNP611/Source_new/src/cgm_interface.F90
---- MCNP_CODE/MCNP611/Source/src/cgm_interface.F90
-+++ MCNP_CODE/MCNP611/Source_new/src/cgm_interface.F90
+diff -rN '--unified=0' MCNP611/Source/src/cgm_interface.F90 MCNP611/Source_new/src/cgm_interface.F90
+--- MCNP611/Source/src/cgm_interface.F90
++++ MCNP611/Source_new/src/cgm_interface.F90
 @@ -28,0 +29,4 @@
 +#if __INTEL_COMPILER >= 1600
 +      import :: c_funptr
@@ -44,9 +44,9 @@ diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/cgm_interface.F90 MCNP_CODE/
 +#else
 @@ -30,0 +35 @@
 +#endif
-diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/charged_particle_history.F90 MCNP_CODE/MCNP611/Source_new/src/charged_particle_history.F90
---- MCNP_CODE/MCNP611/Source/src/charged_particle_history.F90
-+++ MCNP_CODE/MCNP611/Source_new/src/charged_particle_history.F90
+diff -rN '--unified=0' MCNP611/Source/src/charged_particle_history.F90 MCNP611/Source_new/src/charged_particle_history.F90
+--- MCNP611/Source/src/charged_particle_history.F90
++++ MCNP611/Source_new/src/charged_particle_history.F90
 @@ -594 +594,5 @@
 -          call uplpos(xt,uold,pbl%i%lev,D,v,0)
 +          if (am /= one) then
@@ -54,15 +54,15 @@ diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/charged_particle_history.F90
 +          else
 +            call uplpos(xt,uold,pbl%i%lev,D,v,0)
 +          endif
-diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/exemes.F90 MCNP_CODE/MCNP611/Source_new/src/exemes.F90
---- MCNP_CODE/MCNP611/Source/src/exemes.F90
-+++ MCNP_CODE/MCNP611/Source_new/src/exemes.F90
+diff -rN '--unified=0' MCNP611/Source/src/exemes.F90 MCNP611/Source_new/src/exemes.F90
+--- MCNP611/Source/src/exemes.F90
++++ MCNP611/Source_new/src/exemes.F90
 @@ -273 +273 @@
 -      select case( hm(js) )
 +      select case( trim(hm(js)) )
-diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/imcn.F90 MCNP_CODE/MCNP611/Source_new/src/imcn.F90
---- MCNP_CODE/MCNP611/Source/src/imcn.F90
-+++ MCNP_CODE/MCNP611/Source_new/src/imcn.F90
+diff -rN '--unified=0' MCNP611/Source/src/imcn.F90 MCNP611/Source_new/src/imcn.F90
+--- MCNP611/Source/src/imcn.F90
++++ MCNP611/Source_new/src/imcn.F90
 @@ -36,0 +37,3 @@
 +#if __INTEL_COMPILER >= 1600
 +  use, intrinsic :: iso_c_binding
@@ -81,15 +81,15 @@ diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/imcn.F90 MCNP_CODE/MCNP611/S
 +#else
 +      call setrngcgm(rang)
 +#endif
-diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/main.F90 MCNP_CODE/MCNP611/Source_new/src/main.F90
---- MCNP_CODE/MCNP611/Source/src/main.F90
-+++ MCNP_CODE/MCNP611/Source_new/src/main.F90
+diff -rN '--unified=0' MCNP611/Source/src/main.F90 MCNP611/Source_new/src/main.F90
+--- MCNP611/Source/src/main.F90
++++ MCNP611/Source_new/src/main.F90
 @@ -64 +64 @@
 -  use mcnp_env, only : HDPTH0, KOD, LODDAT, VER
 +  use mcnp_env, only : hdpth0, kod, loddat, ver
-diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/mcnp_env.F90 MCNP_CODE/MCNP611/Source_new/src/mcnp_env.F90
---- MCNP_CODE/MCNP611/Source/src/mcnp_env.F90
-+++ MCNP_CODE/MCNP611/Source_new/src/mcnp_env.F90
+diff -rN '--unified=0' MCNP611/Source/src/mcnp_env.F90 MCNP611/Source_new/src/mcnp_env.F90
+--- MCNP611/Source/src/mcnp_env.F90
++++ MCNP611/Source_new/src/mcnp_env.F90
 @@ -0,0 +1,46 @@
 +
 +  module mcnp_env
@@ -137,9 +137,9 @@ diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/mcnp_env.F90 MCNP_CODE/MCNP6
 +      write(iunit,*) '  +-----------------------------------------------------------'
 +    end subroutine print_build_info
 +  end module mcnp_env
-diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/msgtsk.F90 MCNP_CODE/MCNP611/Source_new/src/msgtsk.F90
---- MCNP_CODE/MCNP611/Source/src/msgtsk.F90
-+++ MCNP_CODE/MCNP611/Source_new/src/msgtsk.F90
+diff -rN '--unified=0' MCNP611/Source/src/msgtsk.F90 MCNP611/Source_new/src/msgtsk.F90
+--- MCNP611/Source/src/msgtsk.F90
++++ MCNP611/Source_new/src/msgtsk.F90
 @@ -80,0 +81,3 @@
 +#if __INTEL_COMPILER >= 1600
 +  use, intrinsic :: iso_c_binding
@@ -151,9 +151,9 @@ diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/msgtsk.F90 MCNP_CODE/MCNP611
 +#else
 +    call setrngcgm(rang)
 +#endif
-diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/pblcom.F90 MCNP_CODE/MCNP611/Source_new/src/pblcom.F90
---- MCNP_CODE/MCNP611/Source/src/pblcom.F90
-+++ MCNP_CODE/MCNP611/Source_new/src/pblcom.F90
+diff -rN '--unified=0' MCNP611/Source/src/pblcom.F90 MCNP611/Source_new/src/pblcom.F90
+--- MCNP611/Source/src/pblcom.F90
++++ MCNP611/Source_new/src/pblcom.F90
 @@ -178,4 +178,6 @@
 -  common /pblcom_thread/ pbl, pbl_src, pbl_stack
 -  common /pblcom_thread/ udt, udt_stack
@@ -165,9 +165,9 @@ diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/pblcom.F90 MCNP_CODE/MCNP611
 +  !$OMP THREADPRIVATE( /pblcom_thread1/ )
 +  !$OMP THREADPRIVATE( /pblcom_thread2/ )
 +  !$OMP THREADPRIVATE( /pblcom_thread3/ )
-diff -rN '--unified=0' MCNP_CODE/MCNP611/Source/src/torus.F90 MCNP_CODE/MCNP611/Source_new/src/torus.F90
---- MCNP_CODE/MCNP611/Source/src/torus.F90
-+++ MCNP_CODE/MCNP611/Source_new/src/torus.F90
+diff -rN '--unified=0' MCNP611/Source/src/torus.F90 MCNP611/Source_new/src/torus.F90
+--- MCNP611/Source/src/torus.F90
++++ MCNP611/Source_new/src/torus.F90
 @@ -86 +86,7 @@
 -      if( abs(t3)<=z0 )  go to 40
 +      if( abs(t3)<=z0 ) then
