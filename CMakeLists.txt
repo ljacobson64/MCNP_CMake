@@ -13,6 +13,14 @@ endmacro(create_symlink_bin exec exec_sym)
 
 enable_language(Fortran)
 
+# Clear out some variables automatically set by CMake
+set(CMAKE_C_IMPLICIT_LINK_LIBRARIES "")
+set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES "")
+set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "stdc++")
+set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "")
+set(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES "")
+set(CMAKE_Fortran_IMPLICIT_LINK_DIRECTORIES "")
+
 # Installation directories
 set(INSTALL_BIN_DIR     bin     CACHE PATH "Installation directory for executables")
 set(INSTALL_LIB_DIR     lib     CACHE PATH "Installation directory for libraries")
