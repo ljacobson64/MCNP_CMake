@@ -43,10 +43,10 @@ message(STATUS "MCNP611 version ${MCNP_VERSION} source files found")
 
 # C compiler flags
 if (${CMAKE_C_COMPILER_ID} STREQUAL Intel)
+  #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mcmodel=medium")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pc64")
 else ()
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
-  set(CMAKE_C_FLAGS "${CMAKE_Fortran_FLAGS} -mcmodel=medium")
 endif (${CMAKE_C_COMPILER_ID} STREQUAL Intel)
 
 # Fortran compiler flags
