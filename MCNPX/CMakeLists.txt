@@ -14,8 +14,6 @@ file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/mcnpc/*.cc")
 file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/mcnpf/*.F")
 file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/meshtal/*.F")
 file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/spabi/*.F")
-if (MPI_BUILD)
-endif (MPI_BUILD)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/src/include)
 
 # Figure out which version of MCNP we're compiling based on which source files are present
@@ -29,6 +27,9 @@ endif (${MCNP_VERSION} STREQUAL Unknown)
 message(STATUS "MCNPX version ${MCNP_VERSION} source files found")
 
 # Preprocessor directives
+add_definitions(-DKODE="mcnpx")
+add_definitions(-DVERS="2.7.0")
+add_definitions(-DLODDAT=${DATE})
 add_definitions(-DMESHTAL=ON)
 add_definitions(-DRADIOG=ON)
 add_definitions(-DCEM=ON)
@@ -51,8 +52,14 @@ endif ()
 add_definitions(-DF90=ON)
 
 # Make sure DATAPATH is set
-if (NOT DEFINED ENV{DATAPATH})
-  message(FATAL_ERROR "MCNP DATAPATH not set. The environment variable DATAPATH must be set.")
+if (MCNPX_DATAPATH)
+  add_definitions(-DDPATH="${MCNPX_DATAPATH}")
+else ()
+  if (DEFINED ENV{DATAPATH})
+    add_definitions(-DDPATH="$ENV{DATAPATH}")
+  else ()
+    message(FATAL_ERROR "MCNPX DATAPATH not set. Either the environment variable DATAPATH or the CMake variable DMCNPX_DATAPATH must be set.")
+  endif ()
 endif ()
 
 # MCNP Plotter

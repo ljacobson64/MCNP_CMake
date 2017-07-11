@@ -1,13 +1,5 @@
 message(STATUS "Building MCNP6")
 
-# Get date and time
-# modifed from http://www.cmake.org/pipermail/cmake/2010-November/041034.html
-macro (DATETIME RESULT)
-  execute_process(COMMAND "date" "+%d/%m/%Y" OUTPUT_VARIABLE ${RESULT})
-  string(REGEX REPLACE "(..)/(..)/..(..).*" "\"\\2/\\1/\\3\"" ${RESULT} ${${RESULT}})
-endmacro (DATETIME)
-DATETIME(DATE)
-
 # Source files
 set(MCNP_SRC_FILES)
 file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/dedx/*.F90")
@@ -99,7 +91,7 @@ else ()
   if (DEFINED ENV{DATAPATH})
     add_definitions(-DDPATH="$ENV{DATAPATH}")
   else ()
-    message(FATAL_ERROR "MCNP DATAPATH not set. Either the environment variable DATAPATH or the CMake variable DMCNP6_DATAPATH must be set.")
+    message(FATAL_ERROR "MCNP6 DATAPATH not set. Either the environment variable DATAPATH or the CMake variable DMCNP6_DATAPATH must be set.")
   endif ()
 endif ()
 
