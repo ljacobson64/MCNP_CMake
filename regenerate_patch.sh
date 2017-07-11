@@ -3,8 +3,8 @@
 mkdir -p patch
 rm -f temp
 
-folders=( MCNP5 MCNP6 MCNP611 )
-versions=( 5.1.60 6.1 6.1.1beta )
+folders=(  MCNP5  MCNPX   MCNP6 MCNP611   )
+versions=( 5.1.60 x.2.7.0 6.1   6.1.1beta )
 
 for i in $(seq 0 2); do
   folder=${folders[$i]}

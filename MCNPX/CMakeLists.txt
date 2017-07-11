@@ -1,0 +1,104 @@
+message(STATUS "Building MCNPX")
+
+# Source files
+set(MCNP_SRC_FILES)
+file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/dedx/*.F")
+file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/f77main/*.F")
+file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/fluka89/*.F")
+file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/gvaviv/*.F")
+file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/hexs/*.F")
+file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/histp/*.F")
+file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/lcs/*.F")
+file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/mcnpc/mcnpc.c")
+file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/mcnpc/*.cc")
+file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/mcnpf/*.F")
+file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/meshtal/*.F")
+file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/spabi/*.F")
+if (MPI_BUILD)
+endif (MPI_BUILD)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/src/include)
+
+# Figure out which version of MCNP we're compiling based on which source files are present
+set(MCNP_VERSION Unknown)
+if ("/${MCNP_SRC_FILES};" MATCHES "/main.F;")
+  set(MCNP_VERSION 2.7.0)
+endif ()
+if (${MCNP_VERSION} STREQUAL Unknown)
+  message(FATAL_ERROR "MCNPX source files not found in MCNPX/Source/src")
+endif (${MCNP_VERSION} STREQUAL Unknown)
+message(STATUS "MCNPX version ${MCNP_VERSION} source files found")
+
+# Preprocessor directives
+add_definitions(-DMESHTAL=ON)
+add_definitions(-DRADIOG=ON)
+add_definitions(-DCEM=ON)
+add_definitions(-DHISTP=ON)
+add_definitions(-DSPABI=ON)
+add_definitions(-DDFACT=ON)
+add_definitions(-DXS64=ON)
+add_definitions(-DINCL=ON)
+add_definitions(-DCINDER=ON)
+add_definitions(-DLAQGSM=ON)
+add_definitions(-DNO_PAW=ON)
+add_definitions(-DLINUX=ON)
+add_definitions(-DUNIX=ON)
+add_definitions(-DCHEAP=ON)
+if (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
+  add_definitions(-DINTEL=ON)
+else ()
+  add_definitions(-DGFORT=ON)
+endif ()
+add_definitions(-DF90=ON)
+
+# Make sure DATAPATH is set
+if (NOT DEFINED ENV{DATAPATH})
+  message(FATAL_ERROR "MCNP DATAPATH not set. The environment variable DATAPATH must be set.")
+endif ()
+
+# MCNP Plotter
+if (MCNP_PLOT)
+  find_package(X11 REQUIRED)
+  add_definitions(-DPLOT=ON)
+  add_definitions(-DMCPLOT=ON)
+  add_definitions(-DGKSSIM=ON)
+  add_definitions(-DXLIB=ON)
+endif ()
+
+# MPI
+if (MPI_BUILD)
+  find_package(MPI REQUIRED)
+  add_definitions(-DMULTP=ON)
+  add_definitions(-DMPI=ON)
+  include_directories(${MPI_INCLUDE_PATH})
+endif ()
+
+# Add the executable
+if (MPI_BUILD)
+  set(MCNP_EXEC "mcnpx_${MCNP_VERSION}.mpi")
+  set(MCNP_EXEC_SYM "mcnpx.mpi")
+else ()
+  set(MCNP_EXEC "mcnpx_${MCNP_VERSION}")
+  set(MCNP_EXEC_SYM "mcnpx")
+endif ()
+add_executable(${MCNP_EXEC} ${MCNP_SRC_FILES})
+
+# Make sure the executable is compiled as Fortran
+set_target_properties(${MCNP_EXEC} PROPERTIES LINKER_LANGUAGE Fortran)
+
+# Link appropriate libraries
+if (MCNP_PLOT)
+  target_link_libraries(${MCNP_EXEC} ${X11_LIBRARIES})
+  if (BUILD_STATIC)
+    target_link_libraries(${MCNP_EXEC} xcb)
+    target_link_libraries(${MCNP_EXEC} pthread)
+    target_link_libraries(${MCNP_EXEC} Xau)
+    target_link_libraries(${MCNP_EXEC} Xdmcp)
+  endif (BUILD_STATIC)
+endif ()
+if (MPI_BUILD)
+  target_link_libraries(${MCNP_EXEC} ${MPI_Fortran_LIBRARIES})
+endif ()
+
+# Install MCNP5
+install(TARGETS ${MCNP_EXEC} DESTINATION ${INSTALL_BIN_DIR})
+create_symlink_bin(${MCNP_EXEC} ${MCNP_EXEC_SYM})
