@@ -63,13 +63,12 @@ if (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-intel")
 endif ()
 
-# Get date and time
-# modifed from http://www.cmake.org/pipermail/cmake/2010-November/041034.html
-macro (DATETIME RESULT)
-  execute_process(COMMAND "date" "+%d/%m/%Y" OUTPUT_VARIABLE ${RESULT})
-  string(REGEX REPLACE "(..)/(..)/..(..).*" "\"\\2/\\1/\\3\"" ${RESULT} ${${RESULT}})
-endmacro (DATETIME)
-DATETIME(DATE)
+# Get some environment variables
+set(ENV_USER "$ENV{USER}")
+execute_process(COMMAND hostname       OUTPUT_VARIABLE ENV_HOST OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process(COMMAND uname -s       OUTPUT_VARIABLE ENV_OS   OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process(COMMAND date +%m/%d/%y OUTPUT_VARIABLE ENV_DATE OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process(COMMAND date +%H:%M:%S OUTPUT_VARIABLE ENV_TIME OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 # Figure out which physics codes to build
 if (BUILD_ALL)

@@ -29,7 +29,7 @@ message(STATUS "MCNPX version ${MCNP_VERSION} source files found")
 # Preprocessor directives
 add_definitions(-DKODE="mcnpx")
 add_definitions(-DVERS="2.7.0")
-add_definitions(-DLODDAT=${DATE})
+add_definitions(-DLODDAT="${ENV_DATE}")
 add_definitions(-DMESHTAL=ON)
 add_definitions(-DRADIOG=ON)
 add_definitions(-DCEM=ON)

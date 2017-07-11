@@ -6,7 +6,7 @@ rm -f temp
 folders=(  MCNP5  MCNPX   MCNP6 MCNP611   )
 versions=( 5.1.60 x.2.7.0 6.1   6.1.1beta )
 
-for i in $(seq 0 2); do
+for i in $(seq 0 3); do
   folder=${folders[$i]}
   version=${versions[$i]}
   mv ${folder}/Source      ${folder}/Source_new
