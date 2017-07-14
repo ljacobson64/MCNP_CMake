@@ -14,6 +14,9 @@ for i in $(seq 0 3); do
   diff -rN "--unified=0" ${folder}/Source ${folder}/Source_new > temp
   mv ${folder}/Source      ${folder}/Source_orig
   mv ${folder}/Source_new  ${folder}/Source
-  sed -e "s/.F90\t.*/.F90/" -e "s/.inc\t.*/.inc/" temp > patch/mcnp.${version}.patch
+  sed -e "s/.F\t.*/.F/" \
+      -e "s/.F90\t.*/.F90/" \
+      -e "s/.inc\t.*/.inc/" \
+      temp > patch/mcnp.${version}.patch
   rm -f temp
 done
