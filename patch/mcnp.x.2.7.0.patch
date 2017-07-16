@@ -1,7 +1,7 @@
 diff -rN '--unified=0' MCNPX/Source/src/mcnpx/mcnpf/GLOBAL1_zc.F MCNPX/Source_new/src/mcnpx/mcnpf/GLOBAL1_zc.F
 --- MCNPX/Source/src/mcnpx/mcnpf/GLOBAL1_zc.F
 +++ MCNPX/Source_new/src/mcnpx/mcnpf/GLOBAL1_zc.F
-@@ -527,9 +527,4 @@
+@@ -527,9 +527,5 @@
 -      character*8, parameter :: kod = 'mcnpx'                                   !/*mgp       486*/
 -      character*5, parameter :: ver = '2.7.0'                                   !/*mgp7g       1*/
 -      character*28, parameter :: loddat = 'Mon Apr 18 08:00:00 MST 2011'        !/*mgp7g       2*/
@@ -14,7 +14,8 @@ diff -rN '--unified=0' MCNPX/Source/src/mcnpx/mcnpf/GLOBAL1_zc.F MCNPX/Source_ne
 +      character*8, parameter :: kod = KODE                                      !/*mgp       486*/
 +      character*5, parameter :: ver = VERS                                      !/*mgp7g       1*/
 +      character*28, parameter :: loddat = LODDAT                                !/*mgp7g       2*/
-+      character*80, parameter :: hdpth0 = DPATH                                 !/*mgpc        8*/
++      character*80, parameter :: hdpth0 =
++     &DPATH                                                                     !/*mgpc        8*/
 diff -rN '--unified=0' MCNPX/Source/src/mcnpx/mcnpf/laqmod31.F MCNPX/Source_new/src/mcnpx/mcnpf/laqmod31.F
 --- MCNPX/Source/src/mcnpx/mcnpf/laqmod31.F
 +++ MCNPX/Source_new/src/mcnpx/mcnpf/laqmod31.F
