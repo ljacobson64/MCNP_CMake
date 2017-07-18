@@ -25,3 +25,19 @@ diff -rN '--unified=0' MCNPX/Source/src/mcnpx/mcnpf/laqmod31.F MCNPX/Source_new/
 +      data nba/0,0,1,1,2,3,3,4,0,0,1/
 +      data ma/0.140,0.140,0.940,0.940,1.88,2.82,2.82,3.76,0.492,0.492,
 +     &0.940/
+diff -rN '--unified=0' MCNPX/Source/src/mcnpx/mcnpf/torus.F MCNPX/Source_new/src/mcnpx/mcnpf/torus.F
+--- MCNPX/Source/src/mcnpx/mcnpf/torus.F
++++ MCNPX/Source_new/src/mcnpx/mcnpf/torus.F
+@@ -59 +59 @@
+-      do 30 nr=1,20                                                             !/*to         55*/
++      do nr=1,20                                                                !/*to         55*/
+@@ -64 +64,8 @@
+-   30 if(abs(t3).le.z0)go to 40                                                 !/*to         60*/
++      if(abs(t3).le.z0)then                                                     !/*to         60*/
++        if(xx(m).lt.0.)then
++          go to 60
++        else
++          go to 40
++        endif
++      endif
++      end do
