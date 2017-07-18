@@ -1,0 +1,12 @@
+diff -rN '--unified=0' MCNP5/Source/src/torus.F90 MCNP5/Source_new/src/torus.F90
+--- MCNP5/Source/src/torus.F90
++++ MCNP5/Source_new/src/torus.F90
+@@ -68 +68,7 @@
+-      if( abs(t3)<=z0 )  go to 40
++      if( abs(t3)<=z0 ) then
++        if (xx(m) < 0.) then
++          cycle DO_60
++        else
++          go to 40
++        endif
++      endif
