@@ -95,6 +95,8 @@ add_definitions(-DENV_HOST="${ENV_HOST}")
 add_definitions(-DENV_OS="${ENV_OS}")
 add_definitions(-DENV_DATE="${ENV_DATE}")
 add_definitions(-DENV_TIME="${ENV_TIME}")
+add_definitions(-DENV_CC="${CMAKE_C_COMPILER}")
+add_definitions(-DENV_CXX="${CMAKE_CXX_COMPILER}")
 add_definitions(-DENV_F90="${CMAKE_Fortran_COMPILER}")
 
 # Make sure DATAPATH is set

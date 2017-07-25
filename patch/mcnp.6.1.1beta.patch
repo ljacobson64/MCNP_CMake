@@ -90,7 +90,7 @@ diff -rN '--unified=0' MCNP611/Source/src/main.F90 MCNP611/Source_new/src/main.F
 diff -rN '--unified=0' MCNP611/Source/src/mcnp_env.F90 MCNP611/Source_new/src/mcnp_env.F90
 --- MCNP611/Source/src/mcnp_env.F90
 +++ MCNP611/Source_new/src/mcnp_env.F90
-@@ -0,0 +1,75 @@
+@@ -0,0 +1,77 @@
 +
 +  module mcnp_env
 +    !
@@ -123,6 +123,8 @@ diff -rN '--unified=0' MCNP611/Source/src/mcnp_env.F90 MCNP611/Source_new/src/mc
 +      write(iunit,*) '  |   date          = ', ENV_DATE
 +      write(iunit,*) '  |   time          = ', ENV_TIME
 +      write(iunit,*) '  |'
++      write(iunit,*) '  |   cc            = ', ENV_CC
++      write(iunit,*) '  |   cxx           = ', ENV_CXX
 +      write(iunit,*) '  |   f90           = ', ENV_F90
 +#ifdef OMP
 +      write(iunit,*) '  |   OpenMP        = yes'
