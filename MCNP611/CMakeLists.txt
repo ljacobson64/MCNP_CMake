@@ -142,7 +142,7 @@ endif ()
 
 # Get list of boolean compiler definitions set to ON
 get_directory_property(COMPDEFS COMPILE_DEFINITIONS)
-list(FILTER COMPDEFS INCLUDE REGEX "=ON$")
+list(FILTER COMPDEFS INCLUDE REGEX "=ON$")  # requires cmake 3.6
 list(SORT COMPDEFS)
 string(REPLACE "=ON" " " COMPDEFS ${COMPDEFS})
 string(STRIP "${COMPDEFS}" COMPDEFS)
