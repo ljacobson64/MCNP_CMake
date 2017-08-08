@@ -29,18 +29,26 @@ set(INSTALL_SHARE_DIR   share   CACHE PATH "Installation directory for other fil
 
 # Default to Release build
 if (NOT CMAKE_BUILD_TYPE)
+  message(STATUS "CMAKE_BUILD_TYPE not specified, defaulting to Release")
   set(CMAKE_BUILD_TYPE Release)
 endif (NOT CMAKE_BUILD_TYPE)
+if (NOT CMAKE_BUILD_TYPE STREQUAL "Release" AND
+    NOT CMAKE_BUILD_TYPE STREQUAL "Debug" AND
+    NOT CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+  message(FATAL_ERROR "Specified CMAKE_BUILD_TYPE is invalid; valid options are Release, Debug, RelWithDebInfo")
+endif ()
+message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 
 # Optimization flags: disable anything greater than -O1
+set(CMAKE_C_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_Fortran_FLAGS_DEBUG "-g")
 set(CMAKE_C_FLAGS_RELEASE "-O1")
 set(CMAKE_CXX_FLAGS_RELEASE "-O1")
 set(CMAKE_Fortran_FLAGS_RELEASE "-O1")
-if (NOT ${CMAKE_BUILD_TYPE})
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O1")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -O1")
-endif (NOT ${CMAKE_BUILD_TYPE})
+set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O1 -g")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O1 -g")
+set(CMAKE_Fortran_FLAGS_RELWITHDEBINFO "-O1 -g")
 
 # Determine if we're building static executables
 option(BUILD_STATIC "Build static executables" OFF)
