@@ -1,6 +1,6 @@
 project(MCNP)
 
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 2.8)
 
 macro(create_symlink_bin exec exec_sym)
   install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${exec} ${exec_sym} \
