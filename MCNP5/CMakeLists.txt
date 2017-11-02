@@ -1,36 +1,38 @@
-message(STATUS "Building MCNP5")
+message("")
+
+set(LINK_LIBS)
 
 # Source files
-set(MCNP_SRC_FILES)
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/*.F90")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/*.c")
-if (MPI_BUILD)
-  file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/dotcomm/src/*.F90")
-  file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/dotcomm/src/internals/mpi/*.c")
-endif ()
+file(GLOB SRC_FILES
+  "Source/src/*.c"
+  "Source/src/*.cpp"
+  "Source/src/*.F90"
+)
 
 # Figure out which version of MCNP we're compiling based on which source files are present
 set(MCNP_VERSION Unknown)
-if ("/${MCNP_SRC_FILES};" MATCHES "/ckchar.F90;")
+if ("/${SRC_FILES};" MATCHES "/main.F90;")
   set(MCNP_VERSION 1.40)
 endif ()
-if ("/${MCNP_SRC_FILES};" MATCHES "/annihilation_gammas.F90;" AND
-    "/${MCNP_SRC_FILES};" MATCHES "/phtvr_mod.F90;" AND
-    "/${MCNP_SRC_FILES};" MATCHES "/read_line.F90;")
+# These files are present in 1.51 but not in 1.40
+if ("/${SRC_FILES};" MATCHES "/annihilation_gammas.F90;" AND
+    "/${SRC_FILES};" MATCHES "/phtvr_mod.F90;" AND
+    "/${SRC_FILES};" MATCHES "/read_line.F90;")
   set(MCNP_VERSION 1.51)
 endif ()
-if ("/${MCNP_SRC_FILES};" MATCHES "/isotopic_mod.F90;" AND
-    "/${MCNP_SRC_FILES};" MATCHES "/kadjoint_mod.F90;" AND
-    "/${MCNP_SRC_FILES};" MATCHES "/kinetics_mod.F90;")
+# These files are present in 1.60 but not in 1.51
+if ("/${SRC_FILES};" MATCHES "/isotopic_mod.F90;" AND
+    "/${SRC_FILES};" MATCHES "/kadjoint_mod.F90;" AND
+    "/${SRC_FILES};" MATCHES "/kinetics_mod.F90;")
   set(MCNP_VERSION 1.60)
 endif ()
-if (${MCNP_VERSION} STREQUAL Unknown)
+if (MCNP_VERSION STREQUAL "Unknown")
   message(FATAL_ERROR "MCNP5 source files not found in MCNP5/Source/src")
 endif ()
 message(STATUS "MCNP5 version ${MCNP_VERSION} source files found")
 
 # C compiler flags
-if (${CMAKE_C_COMPILER_ID} STREQUAL Intel)
+if (CMAKE_C_COMPILER_ID STREQUAL "Intel")
   #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mcmodel=medium")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pc64")
 else ()
@@ -38,7 +40,7 @@ else ()
 endif ()
 
 # Fortran compiler flags
-if (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
+if (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -no-vec")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -heap-arrays 1024")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -traceback")
@@ -53,19 +55,11 @@ else ()
   if (MCNP_PLOT)
     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-real-8")
   endif ()
-  if (LIB_TYPE STREQUAL STATIC)
-    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Wl,--allow-multiple-definition")
-  endif ()
 endif ()
 
 # Preprocessor directives
 add_definitions(-DKODE="mcnp")
-if (MPI_BUILD)
-  add_definitions(-DVERS="5.mpi")
-else ()
-  add_definitions(-DVERS="5")
-endif ()
-if (${MCNP_VERSION} STREQUAL 1.60)
+if (MCNP_VERSION STREQUAL "1.60")
   add_definitions(-DTHREAD="MCNP5")
 else ()
   add_definitions(-DTHREAD="MCNP5_RSICC")
@@ -74,7 +68,7 @@ add_definitions(-DTVERS="${MCNP_VERSION}")
 add_definitions(-DLODDAT="${ENV_DATE}")
 add_definitions(-DLINUX=ON)
 add_definitions(-DUNIX=ON)
-if (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
+if (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
   add_definitions(-DINTEL=ON)
   add_definitions(-DDIRACCESS_RECL_WORDS=ON)
 else ()
@@ -100,6 +94,10 @@ if (MCNP_PLOT)
   add_definitions(-DPLOT=ON)
   add_definitions(-DMCPLOT=ON)
   add_definitions(-DXLIB=ON)
+  list(APPEND LINK_LIBS ${X11_LIBRARIES})
+  if (BUILD_STATIC_EXE)
+    list(APPEND LINK_LIBS xcb pthread Xau Xdmcp)
+  endif ()
 endif ()
 
 # OpenMP
@@ -114,16 +112,22 @@ endif ()
 # MPI
 if (MPI_BUILD)
   find_package(MPI REQUIRED)
+  file(GLOB SRC_FILES ${SRC_FILES} "Source/dotcomm/src/*.F90")
+  file(GLOB SRC_FILES ${SRC_FILES} "Source/dotcomm/src/internals/mpi/*.c")
+  add_definitions(-DVERS="5.mpi")
   add_definitions(-DMULTP=ON)
   add_definitions(-DMPI=ON)
   add_definitions(-DDMMP_NAME="mcnp5.mpi")
   add_definitions(-D_DOTCOMM_MPI=ON)
+  list(APPEND LINK_LIBS ${MPI_Fortran_LIBRARIES})
   include_directories(${MPI_INCLUDE_PATH})
   include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/dotcomm/include)
   include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/dotcomm/src/internals/mpi)
+else ()
+  add_definitions(-DVERS="5")
 endif ()
 
-# Add the executable
+# Executable
 if (MPI_BUILD)
   set(MCNP_EXEC "mcnp5.${MCNP_VERSION}.mpi")
   set(MCNP_EXEC_SYM "mcnp5.mpi")
@@ -131,25 +135,14 @@ else ()
   set(MCNP_EXEC "mcnp5.${MCNP_VERSION}")
   set(MCNP_EXEC_SYM "mcnp5")
 endif ()
-add_executable(${MCNP_EXEC} ${MCNP_SRC_FILES})
 
-# Make sure the executable is compiled as Fortran
+get_directory_property(COMPDEFS COMPILE_DEFINITIONS)
+message(STATUS "MCNP5 C_FLAGS: ${CMAKE_C_FLAGS}")
+message(STATUS "MCNP5 CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+message(STATUS "MCNP5 Fortran_FLAGS: ${CMAKE_Fortran_FLAGS}")
+message(STATUS "MCNP5 compile definitions: ${COMPDEFS}")
+
+# Install
+mcnp_install_exe(${MCNP_EXEC})
 set_target_properties(${MCNP_EXEC} PROPERTIES LINKER_LANGUAGE Fortran)
-
-# Link appropriate libraries
-if (MCNP_PLOT)
-  target_link_libraries(${MCNP_EXEC} ${X11_LIBRARIES})
-  if (BUILD_STATIC)
-    target_link_libraries(${MCNP_EXEC} xcb)
-    target_link_libraries(${MCNP_EXEC} pthread)
-    target_link_libraries(${MCNP_EXEC} Xau)
-    target_link_libraries(${MCNP_EXEC} Xdmcp)
-  endif (BUILD_STATIC)
-endif ()
-if (MPI_BUILD)
-  target_link_libraries(${MCNP_EXEC} ${MPI_Fortran_LIBRARIES})
-endif ()
-
-# Install MCNP5
-install(TARGETS ${MCNP_EXEC} DESTINATION ${INSTALL_BIN_DIR})
-create_symlink_bin(${MCNP_EXEC} ${MCNP_EXEC_SYM})
+mcnp_symlink_exe(${MCNP_EXEC} ${MCNP_EXEC_SYM})

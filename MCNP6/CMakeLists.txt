@@ -1,35 +1,39 @@
-message(STATUS "Building MCNP6")
+message("")
+
+set(LINK_LIBS)
 
 # Source files
-set(MCNP_SRC_FILES)
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/dedx/*.F90")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/hexs/*.F90")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/import/*.cpp")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/import/*.f")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/import/*.F")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/import/*.F90")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/lcs/*.F90")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/meshtal/*.F90")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/regl/*.F90")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/spabi/*.F90")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/*.c")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/*.F90")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/partisn/*.F90")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/utils/*.c")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/utils/*.F90")
+file(GLOB SRC_FILES 
+  "Source/dedx/*.F90"
+  "Source/hexs/*.F90"
+  "Source/import/*.cpp"
+  "Source/import/*.f"
+  "Source/import/*.F"
+  "Source/import/*.F90"
+  "Source/lcs/*.F90"
+  "Source/meshtal/*.F90"
+  "Source/regl/*.F90"
+  "Source/spabi/*.F90"
+  "Source/src/*.c"
+  "Source/src/*.cpp"
+  "Source/src/*.F90"
+  "Source/src/partisn/*.F90"
+  "Source/src/utils/*.c"
+  "Source/src/utils/*.F90"
+)
 
 # Figure out which version of MCNP we're compiling based on which source files are present
 set(MCNP_VERSION Unknown)
-if ("/${MCNP_SRC_FILES};" MATCHES "/main.F90;")
+if ("/${SRC_FILES};" MATCHES "/main.F90;")
   set(MCNP_VERSION 6.1)
 endif ()
-if (${MCNP_VERSION} STREQUAL Unknown)
+if (MCNP_VERSION STREQUAL "Unknown")
   message(FATAL_ERROR "MCNP6 source files not found in MCNP6/Source/src")
 endif ()
 message(STATUS "MCNP6 version ${MCNP_VERSION} source files found")
 
 # C compiler flags
-if (${CMAKE_C_COMPILER_ID} STREQUAL Intel)
+if (CMAKE_C_COMPILER_ID STREQUAL "Intel")
   #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mcmodel=medium")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pc64")
 else ()
@@ -37,7 +41,7 @@ else ()
 endif ()
 
 # Fortran compiler flags
-if (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
+if (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -no-vec")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -heap-arrays 1024")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -traceback")
@@ -59,17 +63,12 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/import)
 
 # Preprocessor directives
 add_definitions(-DKODE="mcnp")
-if (MPI_BUILD)
-  add_definitions(-DVERS="6.mpi")
-else ()
-  add_definitions(-DVERS="6")
-endif ()
 add_definitions(-DTHREAD="MCNP6")
 add_definitions(-DTVERS="1.0")
 add_definitions(-DLODDAT="${ENV_DATE}")
 add_definitions(-DLINUX=ON)
 add_definitions(-DUNIX=ON)
-if (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
+if (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
   add_definitions(-DINTEL=ON)
   add_definitions(-DDIRACCESS_RECL_WORDS=ON)
 else ()
@@ -100,6 +99,10 @@ if (MCNP_PLOT)
   find_package(X11 REQUIRED)
   add_definitions(-DPLOT=ON)
   add_definitions(-DXLIB=ON)
+  list(APPEND LINK_LIBS ${X11_LIBRARIES})
+  if (BUILD_STATIC_EXE)
+    list(APPEND LINK_LIBS xcb pthread Xau Xdmcp)
+  endif ()
 endif ()
 
 # OpenMP
@@ -114,11 +117,15 @@ endif ()
 # MPI
 if (MPI_BUILD)
   find_package(MPI REQUIRED)
+  add_definitions(-DVERS="6.mpi")
   add_definitions(-DMPI=ON)
+  list(APPEND LINK_LIBS ${MPI_Fortran_LIBRARIES})
   include_directories(${MPI_INCLUDE_PATH})
+else ()
+  add_definitions(-DVERS="6")
 endif ()
 
-# Add the executable
+# Executable
 if (MPI_BUILD)
   set(MCNP_EXEC "mcnp${MCNP_VERSION}.mpi")
   set(MCNP_EXEC_SYM "mcnp6.mpi")
@@ -126,27 +133,16 @@ else ()
   set(MCNP_EXEC "mcnp${MCNP_VERSION}")
   set(MCNP_EXEC_SYM "mcnp6")
 endif ()
-add_executable(${MCNP_EXEC} ${MCNP_SRC_FILES})
 
-# Make sure the executable is compiled as Fortran
+get_directory_property(COMPDEFS COMPILE_DEFINITIONS)
+message(STATUS "MCNP6 C_FLAGS: ${CMAKE_C_FLAGS}")
+message(STATUS "MCNP6 CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+message(STATUS "MCNP6 Fortran_FLAGS: ${CMAKE_Fortran_FLAGS}")
+message(STATUS "MCNP6 compile definitions: ${COMPDEFS}")
+
+# Install
+mcnp_install_exe(${MCNP_EXEC})
 set_target_properties(${MCNP_EXEC} PROPERTIES LINKER_LANGUAGE Fortran)
-
-# Link appropriate libraries
-if (MCNP_PLOT)
-  target_link_libraries(${MCNP_EXEC} ${X11_LIBRARIES})
-  if (BUILD_STATIC)
-    target_link_libraries(${MCNP_EXEC} xcb)
-    target_link_libraries(${MCNP_EXEC} pthread)
-    target_link_libraries(${MCNP_EXEC} Xau)
-    target_link_libraries(${MCNP_EXEC} Xdmcp)
-  endif (BUILD_STATIC)
-endif ()
-if (MPI_BUILD)
-  target_link_libraries(${MCNP_EXEC} ${MPI_Fortran_LIBRARIES})
-endif ()
-
-# Install MCNP6
-install(TARGETS ${MCNP_EXEC} DESTINATION ${INSTALL_BIN_DIR})
 if (NOT BUILD_MCNP611)
-  create_symlink_bin(${MCNP_EXEC} ${MCNP_EXEC_SYM})
+  mcnp_symlink_exe(${MCNP_EXEC} ${MCNP_EXEC_SYM})
 endif ()

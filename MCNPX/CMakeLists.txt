@@ -1,30 +1,35 @@
-message(STATUS "Building MCNPX")
+message("")
+
+set(LINK_LIBS)
 
 # Source files
-set(MCNP_SRC_FILES)
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/dedx/*.F")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/f77main/*.F")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/fluka89/*.F")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/gvaviv/*.F")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/hexs/*.F")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/histp/*.F")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/lcs/*.F")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/mcnpc/mcnpc.c")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/mcnpc/*.cc")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/mcnpf/*.F")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/meshtal/*.F")
-file(GLOB MCNP_SRC_FILES ${MCNP_SRC_FILES} "Source/src/mcnpx/spabi/*.F")
-include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/src/include)
+file(GLOB SRC_FILES
+  "Source/src/mcnpx/dedx/*.F"
+  "Source/src/mcnpx/f77main/*.F"
+  "Source/src/mcnpx/fluka89/*.F"
+  "Source/src/mcnpx/gvaviv/*.F"
+  "Source/src/mcnpx/hexs/*.F"
+  "Source/src/mcnpx/histp/*.F"
+  "Source/src/mcnpx/lcs/*.F"
+  "Source/src/mcnpx/mcnpc/mcnpc.c"
+  "Source/src/mcnpx/mcnpc/*.cc"
+  "Source/src/mcnpx/mcnpf/*.F"
+  "Source/src/mcnpx/meshtal/*.F"
+  "Source/src/mcnpx/spabi/*.F"
+)
 
 # Figure out which version of MCNP we're compiling based on which source files are present
 set(MCNP_VERSION Unknown)
-if ("/${MCNP_SRC_FILES};" MATCHES "/main.F;")
+if ("/${SRC_FILES};" MATCHES "/main.F;")
   set(MCNP_VERSION 2.7.0)
 endif ()
-if (${MCNP_VERSION} STREQUAL Unknown)
+if (MCNP_VERSION STREQUAL "Unknown")
   message(FATAL_ERROR "MCNPX source files not found in MCNPX/Source/src")
-endif (${MCNP_VERSION} STREQUAL Unknown)
+endif ()
 message(STATUS "MCNPX version ${MCNP_VERSION} source files found")
+
+# Include directories
+include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/src/include)
 
 # Preprocessor directives
 add_definitions(-DKODE="mcnpx")
@@ -44,7 +49,7 @@ add_definitions(-DNO_PAW=ON)
 add_definitions(-DLINUX=ON)
 add_definitions(-DUNIX=ON)
 add_definitions(-DCHEAP=ON)
-if (${CMAKE_Fortran_COMPILER_ID} STREQUAL Intel)
+if (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
   add_definitions(-DINTEL=ON)
 else ()
   add_definitions(-DGFORT=ON)
@@ -69,6 +74,10 @@ if (MCNP_PLOT)
   add_definitions(-DMCPLOT=ON)
   add_definitions(-DGKSSIM=ON)
   add_definitions(-DXLIB=ON)
+  list(APPEND LINK_LIBS ${X11_LIBRARIES})
+  if (BUILD_STATIC_EXE)
+    list(APPEND LINK_LIBS xcb pthread Xau Xdmcp)
+  endif ()
 endif ()
 
 # MPI
@@ -76,10 +85,11 @@ if (MPI_BUILD)
   find_package(MPI REQUIRED)
   add_definitions(-DMULTP=ON)
   add_definitions(-DMPI=ON)
+  list(APPEND LINK_LIBS ${MPI_Fortran_LIBRARIES})
   include_directories(${MPI_INCLUDE_PATH})
 endif ()
 
-# Add the executable
+# Executable
 if (MPI_BUILD)
   set(MCNP_EXEC "mcnpx_${MCNP_VERSION}.mpi")
   set(MCNP_EXEC_SYM "mcnpx.mpi")
@@ -87,25 +97,14 @@ else ()
   set(MCNP_EXEC "mcnpx_${MCNP_VERSION}")
   set(MCNP_EXEC_SYM "mcnpx")
 endif ()
-add_executable(${MCNP_EXEC} ${MCNP_SRC_FILES})
 
-# Make sure the executable is compiled as Fortran
+get_directory_property(COMPDEFS COMPILE_DEFINITIONS)
+message(STATUS "MCNPX C_FLAGS: ${CMAKE_C_FLAGS}")
+message(STATUS "MCNPX CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+message(STATUS "MCNPX Fortran_FLAGS: ${CMAKE_Fortran_FLAGS}")
+message(STATUS "MCNPX compile definitions: ${COMPDEFS}")
+
+# Install
+mcnp_install_exe(${MCNP_EXEC})
 set_target_properties(${MCNP_EXEC} PROPERTIES LINKER_LANGUAGE Fortran)
-
-# Link appropriate libraries
-if (MCNP_PLOT)
-  target_link_libraries(${MCNP_EXEC} ${X11_LIBRARIES})
-  if (BUILD_STATIC)
-    target_link_libraries(${MCNP_EXEC} xcb)
-    target_link_libraries(${MCNP_EXEC} pthread)
-    target_link_libraries(${MCNP_EXEC} Xau)
-    target_link_libraries(${MCNP_EXEC} Xdmcp)
-  endif (BUILD_STATIC)
-endif ()
-if (MPI_BUILD)
-  target_link_libraries(${MCNP_EXEC} ${MPI_Fortran_LIBRARIES})
-endif ()
-
-# Install MCNP5
-install(TARGETS ${MCNP_EXEC} DESTINATION ${INSTALL_BIN_DIR})
-create_symlink_bin(${MCNP_EXEC} ${MCNP_EXEC_SYM})
+mcnp_symlink_exe(${MCNP_EXEC} ${MCNP_EXEC_SYM})
