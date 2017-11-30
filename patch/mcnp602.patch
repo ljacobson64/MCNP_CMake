@@ -104,6 +104,14 @@ diff -rN '--unified=0' MCNP602/Source/src/mcnp_env.F90 MCNP602/Source_new/src/mc
 +    character(len=*), parameter ::  hdpth0         = DPATH
 +
 +  end module mcnp_env
+diff -rN '--unified=0' MCNP602/Source/src/omp_lib_mod.F90 MCNP602/Source_new/src/omp_lib_mod.F90
+--- MCNP602/Source/src/omp_lib_mod.F90
++++ MCNP602/Source_new/src/omp_lib_mod.F90
+@@ -21,3 +21 @@
+-#if   !defined(AIX) \
+-   && !defined(INTEL) \
+-   && !( defined(MACOSX) && defined(IBM) )
++#if 1
 diff -rN '--unified=0' MCNP602/Source/src/torus.F90 MCNP602/Source_new/src/torus.F90
 --- MCNP602/Source/src/torus.F90
 +++ MCNP602/Source_new/src/torus.F90
