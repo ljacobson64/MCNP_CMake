@@ -76,7 +76,7 @@ if (MCNP_PLOT)
   add_definitions(-DXLIB=ON)
   list(APPEND LINK_LIBS ${X11_LIBRARIES})
   if (BUILD_STATIC_EXE)
-    list(APPEND LINK_LIBS xcb pthread Xau Xdmcp)
+    list(APPEND LINK_LIBS xcb pthread Xau Xdmcp dl)
   endif ()
 endif ()
 
