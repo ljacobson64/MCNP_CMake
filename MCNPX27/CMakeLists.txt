@@ -19,7 +19,7 @@ file(GLOB SRC_FILES
 )
 
 set(MCNP_VERSION X27)
-if ("/${SRC_FILES};" MATCHES "/main.F90;")
+if ("/${SRC_FILES};" MATCHES "/main.F;")
   message(STATUS "MCNP${MCNP_VERSION} source files found")
 else ()
   message(FATAL_ERROR "MCNP${MCNP_VERSION} source files not found in MCNP${MCNP_VERSION}/Source")
