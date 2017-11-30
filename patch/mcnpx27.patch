@@ -1,6 +1,6 @@
-diff -rN '--unified=0' MCNPX/Source/src/mcnpx/mcnpf/GLOBAL1_zc.F MCNPX/Source_new/src/mcnpx/mcnpf/GLOBAL1_zc.F
---- MCNPX/Source/src/mcnpx/mcnpf/GLOBAL1_zc.F
-+++ MCNPX/Source_new/src/mcnpx/mcnpf/GLOBAL1_zc.F
+diff -rN '--unified=0' MCNPX27/Source/mcnpx/mcnpf/GLOBAL1_zc.F MCNPX27/Source_new/mcnpx/mcnpf/GLOBAL1_zc.F
+--- MCNPX27/Source/mcnpx/mcnpf/GLOBAL1_zc.F
++++ MCNPX27/Source_new/mcnpx/mcnpf/GLOBAL1_zc.F
 @@ -527,9 +527,5 @@
 -      character*8, parameter :: kod = 'mcnpx'                                   !/*mgp       486*/
 -      character*5, parameter :: ver = '2.7.0'                                   !/*mgp7g       1*/
@@ -16,18 +16,18 @@ diff -rN '--unified=0' MCNPX/Source/src/mcnpx/mcnpf/GLOBAL1_zc.F MCNPX/Source_ne
 +      character*28, parameter :: loddat = LODDAT                                !/*mgp7g       2*/
 +      character*80, parameter :: hdpth0 =
 +     &DPATH                                                                     !/*mgpc        8*/
-diff -rN '--unified=0' MCNPX/Source/src/mcnpx/mcnpf/laqmod31.F MCNPX/Source_new/src/mcnpx/mcnpf/laqmod31.F
---- MCNPX/Source/src/mcnpx/mcnpf/laqmod31.F
-+++ MCNPX/Source_new/src/mcnpx/mcnpf/laqmod31.F
+diff -rN '--unified=0' MCNPX27/Source/mcnpx/mcnpf/laqmod31.F MCNPX27/Source_new/mcnpx/mcnpf/laqmod31.F
+--- MCNPX27/Source/mcnpx/mcnpf/laqmod31.F
++++ MCNPX27/Source_new/mcnpx/mcnpf/laqmod31.F
 @@ -2435,2 +2435,3 @@
 -      data nba/2*0,2*1,2,3,3,4,0,0,1/
 -      data ma/2*0.140,2*0.940,1.88,2*2.82,3.76,2*0.492,0.940/
 +      data nba/0,0,1,1,2,3,3,4,0,0,1/
 +      data ma/0.140,0.140,0.940,0.940,1.88,2.82,2.82,3.76,0.492,0.492,
 +     &0.940/
-diff -rN '--unified=0' MCNPX/Source/src/mcnpx/mcnpf/torus.F MCNPX/Source_new/src/mcnpx/mcnpf/torus.F
---- MCNPX/Source/src/mcnpx/mcnpf/torus.F
-+++ MCNPX/Source_new/src/mcnpx/mcnpf/torus.F
+diff -rN '--unified=0' MCNPX27/Source/mcnpx/mcnpf/torus.F MCNPX27/Source_new/mcnpx/mcnpf/torus.F
+--- MCNPX27/Source/mcnpx/mcnpf/torus.F
++++ MCNPX27/Source_new/mcnpx/mcnpf/torus.F
 @@ -59 +59 @@
 -      do 30 nr=1,20                                                             !/*to         55*/
 +      do nr=1,20                                                                !/*to         55*/

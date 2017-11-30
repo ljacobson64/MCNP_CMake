@@ -12,24 +12,24 @@ file(GLOB SRC_FILES
 # Figure out which version of MCNP we're compiling based on which source files are present
 set(MCNP_VERSION Unknown)
 if ("/${SRC_FILES};" MATCHES "/main.F90;")
-  set(MCNP_VERSION 1.40)
+  set(MCNP_VERSION 514)
 endif ()
 # These files are present in 1.51 but not in 1.40
 if ("/${SRC_FILES};" MATCHES "/annihilation_gammas.F90;" AND
     "/${SRC_FILES};" MATCHES "/phtvr_mod.F90;" AND
     "/${SRC_FILES};" MATCHES "/read_line.F90;")
-  set(MCNP_VERSION 1.51)
+  set(MCNP_VERSION 515)
 endif ()
 # These files are present in 1.60 but not in 1.51
 if ("/${SRC_FILES};" MATCHES "/isotopic_mod.F90;" AND
     "/${SRC_FILES};" MATCHES "/kadjoint_mod.F90;" AND
     "/${SRC_FILES};" MATCHES "/kinetics_mod.F90;")
-  set(MCNP_VERSION 1.60)
+  set(MCNP_VERSION 516)
 endif ()
 if (MCNP_VERSION STREQUAL "Unknown")
-  message(FATAL_ERROR "MCNP5 source files not found in MCNP5/Source/src")
+  message(FATAL_ERROR "MCNP516 source files not found in MCNP516/Source")
 endif ()
-message(STATUS "MCNP5 version ${MCNP_VERSION} source files found")
+message(STATUS "MCNP516 source files found")
 
 # C compiler flags
 if (CMAKE_C_COMPILER_ID STREQUAL "Intel")
@@ -78,13 +78,13 @@ add_definitions(-DF90_INT_4BYTE=ON)
 add_definitions(-DF90_REAL_8BYTE=ON)
 
 # Make sure DATAPATH is set
-if (MCNP5_DATAPATH)
-  add_definitions(-DDPATH="${MCNP5_DATAPATH}")
+if (MCNP516_DATAPATH)
+  add_definitions(-DDPATH="${MCNP516_DATAPATH}")
 else ()
   if (DEFINED ENV{DATAPATH})
     add_definitions(-DDPATH="$ENV{DATAPATH}")
   else ()
-    message(FATAL_ERROR "MCNP5 DATAPATH not set. Either the environment variable DATAPATH or the CMake variable DMCNP5_DATAPATH must be set.")
+    message(FATAL_ERROR "MCNP516 DATAPATH not set. Either the environment variable DATAPATH or the CMake variable DMCNP516_DATAPATH must be set.")
   endif ()
 endif ()
 
@@ -129,18 +129,18 @@ endif ()
 
 # Executable
 if (MPI_BUILD)
-  set(MCNP_EXEC "mcnp5.${MCNP_VERSION}.mpi")
+  set(MCNP_EXEC "mcnp${MCNP_VERSION}.mpi")
   set(MCNP_EXEC_SYM "mcnp5.mpi")
 else ()
-  set(MCNP_EXEC "mcnp5.${MCNP_VERSION}")
+  set(MCNP_EXEC "mcnp${MCNP_VERSION}")
   set(MCNP_EXEC_SYM "mcnp5")
 endif ()
 
 get_directory_property(COMPDEFS COMPILE_DEFINITIONS)
-message(STATUS "MCNP5 C_FLAGS: ${CMAKE_C_FLAGS}")
-message(STATUS "MCNP5 CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
-message(STATUS "MCNP5 Fortran_FLAGS: ${CMAKE_Fortran_FLAGS}")
-message(STATUS "MCNP5 compile definitions: ${COMPDEFS}")
+message(STATUS "MCNP516 C_FLAGS: ${CMAKE_C_FLAGS}")
+message(STATUS "MCNP516 CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+message(STATUS "MCNP516 Fortran_FLAGS: ${CMAKE_Fortran_FLAGS}")
+message(STATUS "MCNP516 compile definitions: ${COMPDEFS}")
 
 # Install
 mcnp_install_exe(${MCNP_EXEC})

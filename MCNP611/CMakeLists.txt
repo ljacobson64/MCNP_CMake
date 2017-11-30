@@ -29,12 +29,12 @@ if ("/${SRC_FILES};" MATCHES "/cerenkov_mod.F90;" AND
     "/${SRC_FILES};" MATCHES "/cgm_interface.F90;" AND
     "/${SRC_FILES};" MATCHES "/parse_ichoic.F90;" AND
     "/${SRC_FILES};" MATCHES "/reflect_light.F90;")
-  set(MCNP_VERSION 6.1.1beta)
+  set(MCNP_VERSION 611)
 endif ()
 if (MCNP_VERSION STREQUAL "Unknown")
-  message(FATAL_ERROR "MCNP611 source files not found in MCNP611/Source/src")
+  message(FATAL_ERROR "MCNP611 source files not found in MCNP611/Source")
 endif ()
-message(STATUS "MCNP611 version ${MCNP_VERSION} source files found")
+message(STATUS "MCNP611 source files found")
 
 # C compiler flags
 if (CMAKE_C_COMPILER_ID STREQUAL "Intel")

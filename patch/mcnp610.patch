@@ -1,18 +1,18 @@
-diff -rN '--unified=0' MCNP6/Source/import/frgcpa_.inc MCNP6/Source_new/import/frgcpa_.inc
---- MCNP6/Source/import/frgcpa_.inc
-+++ MCNP6/Source_new/import/frgcpa_.inc
+diff -rN '--unified=0' MCNP610/Source/import/frgcpa_.inc MCNP610/Source_new/import/frgcpa_.inc
+--- MCNP610/Source/import/frgcpa_.inc
++++ MCNP610/Source_new/import/frgcpa_.inc
 @@ -3 +3 @@
 -!$OMP THREADPRIVATE (/FRGCPA_/)
 +! !$OMP THREADPRIVATE (/FRGCPA_/)
-diff -rN '--unified=0' MCNP6/Source/import/frgspa_.inc MCNP6/Source_new/import/frgspa_.inc
---- MCNP6/Source/import/frgspa_.inc
-+++ MCNP6/Source_new/import/frgspa_.inc
+diff -rN '--unified=0' MCNP610/Source/import/frgspa_.inc MCNP610/Source_new/import/frgspa_.inc
+--- MCNP610/Source/import/frgspa_.inc
++++ MCNP610/Source_new/import/frgspa_.inc
 @@ -3 +3 @@
 -!$OMP THREADPRIVATE (/FRGSPA_/)
 +! !$OMP THREADPRIVATE (/FRGSPA_/)
-diff -rN '--unified=0' MCNP6/Source/src/burn_out.F90 MCNP6/Source_new/src/burn_out.F90
---- MCNP6/Source/src/burn_out.F90
-+++ MCNP6/Source_new/src/burn_out.F90
+diff -rN '--unified=0' MCNP610/Source/src/burn_out.F90 MCNP610/Source_new/src/burn_out.F90
+--- MCNP610/Source/src/burn_out.F90
++++ MCNP610/Source_new/src/burn_out.F90
 @@ -418 +418 @@
 -          write (iuo,'(/,a,i5)') ' Material #:',nmt(matb(iq))
 +          write (iuo,'(/,a,i8)') ' Material #:',nmt(matb(iq))
@@ -34,9 +34,9 @@ diff -rN '--unified=0' MCNP6/Source/src/burn_out.F90 MCNP6/Source_new/src/burn_o
 @@ -468 +468 @@
 -      write (iuo,'(/a,i4,a,i3,a,1p,e9.3,a,a,e9.3,a,//,a,/,a)') &
 +      write (iuo,'(/a,i8,a,i3,a,1p,e9.3,a,a,e9.3,a,//,a,/,a)') &
-diff -rN '--unified=0' MCNP6/Source/src/charged_particle_history.F90 MCNP6/Source_new/src/charged_particle_history.F90
---- MCNP6/Source/src/charged_particle_history.F90
-+++ MCNP6/Source_new/src/charged_particle_history.F90
+diff -rN '--unified=0' MCNP610/Source/src/charged_particle_history.F90 MCNP610/Source_new/src/charged_particle_history.F90
+--- MCNP610/Source/src/charged_particle_history.F90
++++ MCNP610/Source_new/src/charged_particle_history.F90
 @@ -580 +580,5 @@
 -          call uplpos(xt,uold,pbl%i%lev,D,v,0)
 +          if (am /= one) then
@@ -44,21 +44,21 @@ diff -rN '--unified=0' MCNP6/Source/src/charged_particle_history.F90 MCNP6/Sourc
 +          else
 +            call uplpos(xt,uold,pbl%i%lev,D,v,0)
 +          endif
-diff -rN '--unified=0' MCNP6/Source/src/exemes.F90 MCNP6/Source_new/src/exemes.F90
---- MCNP6/Source/src/exemes.F90
-+++ MCNP6/Source_new/src/exemes.F90
+diff -rN '--unified=0' MCNP610/Source/src/exemes.F90 MCNP610/Source_new/src/exemes.F90
+--- MCNP610/Source/src/exemes.F90
++++ MCNP610/Source_new/src/exemes.F90
 @@ -273 +273 @@
 -      select case( hm(js) )
 +      select case( trim(hm(js)) )
-diff -rN '--unified=0' MCNP6/Source/src/main.F90 MCNP6/Source_new/src/main.F90
---- MCNP6/Source/src/main.F90
-+++ MCNP6/Source_new/src/main.F90
+diff -rN '--unified=0' MCNP610/Source/src/main.F90 MCNP610/Source_new/src/main.F90
+--- MCNP610/Source/src/main.F90
++++ MCNP610/Source_new/src/main.F90
 @@ -65 +65 @@
 -  use mcnp_env, only : HDPTH0, KOD, LODDAT, VER
 +  use mcnp_env, only : hdpth0, kod, loddat, ver
-diff -rN '--unified=0' MCNP6/Source/src/mcnp_env.F90 MCNP6/Source_new/src/mcnp_env.F90
---- MCNP6/Source/src/mcnp_env.F90
-+++ MCNP6/Source_new/src/mcnp_env.F90
+diff -rN '--unified=0' MCNP610/Source/src/mcnp_env.F90 MCNP610/Source_new/src/mcnp_env.F90
+--- MCNP610/Source/src/mcnp_env.F90
++++ MCNP610/Source_new/src/mcnp_env.F90
 @@ -0,0 +1,14 @@
 +
 +  module mcnp_env
@@ -74,9 +74,9 @@ diff -rN '--unified=0' MCNP6/Source/src/mcnp_env.F90 MCNP6/Source_new/src/mcnp_e
 +    character(len=*), parameter ::  hdpth0         = DPATH
 +
 +  end module mcnp_env
-diff -rN '--unified=0' MCNP6/Source/src/torus.F90 MCNP6/Source_new/src/torus.F90
---- MCNP6/Source/src/torus.F90
-+++ MCNP6/Source_new/src/torus.F90
+diff -rN '--unified=0' MCNP610/Source/src/torus.F90 MCNP610/Source_new/src/torus.F90
+--- MCNP610/Source/src/torus.F90
++++ MCNP610/Source_new/src/torus.F90
 @@ -90 +90,7 @@
 -      if( abs(t3)<=z0 )  go to 40
 +      if( abs(t3)<=z0 ) then
@@ -86,9 +86,9 @@ diff -rN '--unified=0' MCNP6/Source/src/torus.F90 MCNP6/Source_new/src/torus.F90
 +          go to 40
 +        endif
 +      endif
-diff -rN '--unified=0' MCNP6/Source/src/trfsrf.F90 MCNP6/Source_new/src/trfsrf.F90
---- MCNP6/Source/src/trfsrf.F90
-+++ MCNP6/Source_new/src/trfsrf.F90
+diff -rN '--unified=0' MCNP610/Source/src/trfsrf.F90 MCNP610/Source_new/src/trfsrf.F90
+--- MCNP610/Source/src/trfsrf.F90
++++ MCNP610/Source_new/src/trfsrf.F90
 @@ -200 +200 @@
 -  scf(l+1:l+3) = scf(l+1:l+3) - trf(2:3,jt)
 +  scf(l+1:l+3) = scf(l+1:l+3) - trf(2:4,jt)

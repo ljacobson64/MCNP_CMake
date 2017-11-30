@@ -3,12 +3,13 @@
 mkdir -p patch
 rm -f temp
 
-folders=(  MCNP5  MCNPX   MCNP6 MCNP611   )
-versions=( 5.1.60 x.2.7.0 6.1   6.1.1beta )
+versions="516 X27 610 611"
 
-for i in $(seq 0 3); do
-  folder=${folders[$i]}
-  version=${versions[$i]}
+for version in ${versions}; do
+  folder=MCNP${version}
+  if [ ${version} == "X27" ]; then patch=mcnpx27.patch
+  else patch=mcnp${version}.patch
+  fi
   mv ${folder}/Source      ${folder}/Source_new
   mv ${folder}/Source_orig ${folder}/Source
   diff -rN "--unified=0" ${folder}/Source ${folder}/Source_new > temp
@@ -17,6 +18,6 @@ for i in $(seq 0 3); do
   sed -e "s/.F\t.*/.F/" \
       -e "s/.F90\t.*/.F90/" \
       -e "s/.inc\t.*/.inc/" \
-      temp > patch/mcnp.${version}.patch
+      temp > patch/${patch}
   rm -f temp
 done

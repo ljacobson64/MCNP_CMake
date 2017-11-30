@@ -25,12 +25,12 @@ file(GLOB SRC_FILES
 # Figure out which version of MCNP we're compiling based on which source files are present
 set(MCNP_VERSION Unknown)
 if ("/${SRC_FILES};" MATCHES "/main.F90;")
-  set(MCNP_VERSION 6.1)
+  set(MCNP_VERSION 610)
 endif ()
 if (MCNP_VERSION STREQUAL "Unknown")
-  message(FATAL_ERROR "MCNP6 source files not found in MCNP6/Source/src")
+  message(FATAL_ERROR "MCNP610 source files not found in MCNP610/Source")
 endif ()
-message(STATUS "MCNP6 version ${MCNP_VERSION} source files found")
+message(STATUS "MCNP610 source files found")
 
 # C compiler flags
 if (CMAKE_C_COMPILER_ID STREQUAL "Intel")
@@ -84,13 +84,13 @@ add_definitions(-DLAQGSM=ON)
 add_definitions(-DUOD=ON)
 
 # Make sure DATAPATH is set
-if (MCNP6_DATAPATH)
-  add_definitions(-DDPATH="${MCNP6_DATAPATH}")
+if (MCNP610_DATAPATH)
+  add_definitions(-DDPATH="${MCNP610_DATAPATH}")
 else ()
   if (DEFINED ENV{DATAPATH})
     add_definitions(-DDPATH="$ENV{DATAPATH}")
   else ()
-    message(FATAL_ERROR "MCNP6 DATAPATH not set. Either the environment variable DATAPATH or the CMake variable DMCNP6_DATAPATH must be set.")
+    message(FATAL_ERROR "MCNP610 DATAPATH not set. Either the environment variable DATAPATH or the CMake variable DMCNP610_DATAPATH must be set.")
   endif ()
 endif ()
 
@@ -135,10 +135,10 @@ else ()
 endif ()
 
 get_directory_property(COMPDEFS COMPILE_DEFINITIONS)
-message(STATUS "MCNP6 C_FLAGS: ${CMAKE_C_FLAGS}")
-message(STATUS "MCNP6 CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
-message(STATUS "MCNP6 Fortran_FLAGS: ${CMAKE_Fortran_FLAGS}")
-message(STATUS "MCNP6 compile definitions: ${COMPDEFS}")
+message(STATUS "MCNP610 C_FLAGS: ${CMAKE_C_FLAGS}")
+message(STATUS "MCNP610 CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+message(STATUS "MCNP610 Fortran_FLAGS: ${CMAKE_Fortran_FLAGS}")
+message(STATUS "MCNP610 compile definitions: ${COMPDEFS}")
 
 # Install
 mcnp_install_exe(${MCNP_EXEC})

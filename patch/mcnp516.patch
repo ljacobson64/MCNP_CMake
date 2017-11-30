@@ -1,6 +1,6 @@
-diff -rN '--unified=0' MCNP5/Source/src/torus.F90 MCNP5/Source_new/src/torus.F90
---- MCNP5/Source/src/torus.F90
-+++ MCNP5/Source_new/src/torus.F90
+diff -rN '--unified=0' MCNP516/Source/src/torus.F90 MCNP516/Source_new/src/torus.F90
+--- MCNP516/Source/src/torus.F90
++++ MCNP516/Source_new/src/torus.F90
 @@ -68 +68,7 @@
 -      if( abs(t3)<=z0 )  go to 40
 +      if( abs(t3)<=z0 ) then

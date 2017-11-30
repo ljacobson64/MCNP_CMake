@@ -4,32 +4,32 @@ set(LINK_LIBS)
 
 # Source files
 file(GLOB SRC_FILES
-  "Source/src/mcnpx/dedx/*.F"
-  "Source/src/mcnpx/f77main/*.F"
-  "Source/src/mcnpx/fluka89/*.F"
-  "Source/src/mcnpx/gvaviv/*.F"
-  "Source/src/mcnpx/hexs/*.F"
-  "Source/src/mcnpx/histp/*.F"
-  "Source/src/mcnpx/lcs/*.F"
-  "Source/src/mcnpx/mcnpc/mcnpc.c"
-  "Source/src/mcnpx/mcnpc/*.cc"
-  "Source/src/mcnpx/mcnpf/*.F"
-  "Source/src/mcnpx/meshtal/*.F"
-  "Source/src/mcnpx/spabi/*.F"
+  "Source/mcnpx/dedx/*.F"
+  "Source/mcnpx/f77main/*.F"
+  "Source/mcnpx/fluka89/*.F"
+  "Source/mcnpx/gvaviv/*.F"
+  "Source/mcnpx/hexs/*.F"
+  "Source/mcnpx/histp/*.F"
+  "Source/mcnpx/lcs/*.F"
+  "Source/mcnpx/mcnpc/mcnpc.c"
+  "Source/mcnpx/mcnpc/*.cc"
+  "Source/mcnpx/mcnpf/*.F"
+  "Source/mcnpx/meshtal/*.F"
+  "Source/mcnpx/spabi/*.F"
 )
 
 # Figure out which version of MCNP we're compiling based on which source files are present
 set(MCNP_VERSION Unknown)
 if ("/${SRC_FILES};" MATCHES "/main.F;")
-  set(MCNP_VERSION 2.7.0)
+  set(MCNP_VERSION x27)
 endif ()
 if (MCNP_VERSION STREQUAL "Unknown")
-  message(FATAL_ERROR "MCNPX source files not found in MCNPX/Source/src")
+  message(FATAL_ERROR "MCNPX27 source files not found in MCNPX27/Source")
 endif ()
-message(STATUS "MCNPX version ${MCNP_VERSION} source files found")
+message(STATUS "MCNPX27 source files found")
 
 # Include directories
-include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/src/include)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/include)
 
 # Preprocessor directives
 add_definitions(-DKODE="mcnpx")
@@ -57,13 +57,13 @@ endif ()
 add_definitions(-DF90=ON)
 
 # Make sure DATAPATH is set
-if (MCNPX_DATAPATH)
-  add_definitions(-DDPATH="${MCNPX_DATAPATH}")
+if (MCNPX27_DATAPATH)
+  add_definitions(-DDPATH="${MCNPX27_DATAPATH}")
 else ()
   if (DEFINED ENV{DATAPATH})
     add_definitions(-DDPATH="$ENV{DATAPATH}")
   else ()
-    message(FATAL_ERROR "MCNPX DATAPATH not set. Either the environment variable DATAPATH or the CMake variable DMCNPX_DATAPATH must be set.")
+    message(FATAL_ERROR "MCNPX27 DATAPATH not set. Either the environment variable DATAPATH or the CMake variable DMCNPX27_DATAPATH must be set.")
   endif ()
 endif ()
 
@@ -91,18 +91,18 @@ endif ()
 
 # Executable
 if (MPI_BUILD)
-  set(MCNP_EXEC "mcnpx_${MCNP_VERSION}.mpi")
+  set(MCNP_EXEC "mcnp${MCNP_VERSION}.mpi")
   set(MCNP_EXEC_SYM "mcnpx.mpi")
 else ()
-  set(MCNP_EXEC "mcnpx_${MCNP_VERSION}")
+  set(MCNP_EXEC "mcnp${MCNP_VERSION}")
   set(MCNP_EXEC_SYM "mcnpx")
 endif ()
 
 get_directory_property(COMPDEFS COMPILE_DEFINITIONS)
-message(STATUS "MCNPX C_FLAGS: ${CMAKE_C_FLAGS}")
-message(STATUS "MCNPX CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
-message(STATUS "MCNPX Fortran_FLAGS: ${CMAKE_Fortran_FLAGS}")
-message(STATUS "MCNPX compile definitions: ${COMPDEFS}")
+message(STATUS "MCNPX27 C_FLAGS: ${CMAKE_C_FLAGS}")
+message(STATUS "MCNPX27 CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+message(STATUS "MCNPX27 Fortran_FLAGS: ${CMAKE_Fortran_FLAGS}")
+message(STATUS "MCNPX27 compile definitions: ${COMPDEFS}")
 
 # Install
 mcnp_install_exe(${MCNP_EXEC})
