@@ -22,15 +22,12 @@ file(GLOB SRC_FILES
   "Source/src/utils/*.F90"
 )
 
-# Figure out which version of MCNP we're compiling based on which source files are present
-set(MCNP_VERSION Unknown)
+set(MCNP_VERSION 610)
 if ("/${SRC_FILES};" MATCHES "/main.F90;")
-  set(MCNP_VERSION 610)
+  message(STATUS "MCNP${MCNP_VERSION} source files found")
+else ()
+  message(FATAL_ERROR "MCNP${MCNP_VERSION} source files not found in MCNP${MCNP_VERSION}/Source")
 endif ()
-if (MCNP_VERSION STREQUAL "Unknown")
-  message(FATAL_ERROR "MCNP610 source files not found in MCNP610/Source")
-endif ()
-message(STATUS "MCNP610 source files found")
 
 # C compiler flags
 if (CMAKE_C_COMPILER_ID STREQUAL "Intel")
@@ -84,13 +81,13 @@ add_definitions(-DLAQGSM=ON)
 add_definitions(-DUOD=ON)
 
 # Make sure DATAPATH is set
-if (MCNP610_DATAPATH)
-  add_definitions(-DDPATH="${MCNP610_DATAPATH}")
+if (MCNP${MCNP_VERSION}_DATAPATH)
+  add_definitions(-DDPATH="${MCNP${MCNP_VERSION}_DATAPATH}")
 else ()
   if (DEFINED ENV{DATAPATH})
     add_definitions(-DDPATH="$ENV{DATAPATH}")
   else ()
-    message(FATAL_ERROR "MCNP610 DATAPATH not set. Either the environment variable DATAPATH or the CMake variable DMCNP610_DATAPATH must be set.")
+    message(FATAL_ERROR "MCNP${MCNP_VERSION} DATAPATH not set. Either the environment variable DATAPATH or the CMake variable DMCNP${MCNP_VERSION}_DATAPATH must be set.")
   endif ()
 endif ()
 
@@ -135,10 +132,10 @@ else ()
 endif ()
 
 get_directory_property(COMPDEFS COMPILE_DEFINITIONS)
-message(STATUS "MCNP610 C_FLAGS: ${CMAKE_C_FLAGS}")
-message(STATUS "MCNP610 CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
-message(STATUS "MCNP610 Fortran_FLAGS: ${CMAKE_Fortran_FLAGS}")
-message(STATUS "MCNP610 compile definitions: ${COMPDEFS}")
+message(STATUS "MCNP${MCNP_VERSION} C_FLAGS: ${CMAKE_C_FLAGS}")
+message(STATUS "MCNP${MCNP_VERSION} CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+message(STATUS "MCNP${MCNP_VERSION} Fortran_FLAGS: ${CMAKE_Fortran_FLAGS}")
+message(STATUS "MCNP${MCNP_VERSION} compile definitions: ${COMPDEFS}")
 
 # Install
 mcnp_install_exe(${MCNP_EXEC})

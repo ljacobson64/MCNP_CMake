@@ -1,5 +1,5 @@
-These files allow for users to build
-MCNP516, MCNPX27, MCNP602, MCNP610, and MCNP611
+These files allow for users to build MCNP versions
+514, 515, 516, X27, 602, 610, and 611
 with CMake.
 
 Build example:
@@ -16,7 +16,9 @@ cd ..
 ln -s MCNP_CMake src
 mkdir bld
 cd bld
-cmake ../src -DBUILD_MCNP516=ON \
+cmake ../src -DBUILD_MCNP514=ON \
+             -DBUILD_MCNP515=ON \
+             -DBUILD_MCNP516=ON \
              -DBUILD_MCNPX27=ON \
              -DBUILD_MCNP602=ON \
              -DBUILD_MCNP610=ON \
@@ -30,6 +32,8 @@ cmake ../src -DBUILD_MCNP516=ON \
 The MCNP tarballs should be named like this:
 
 ```
+${dist_dir}/mcnp/mcnp514-source.tar.gz
+${dist_dir}/mcnp/mcnp515-source.tar.gz
 ${dist_dir}/mcnp/mcnp516-source.tar.gz
 ${dist_dir}/mcnp/mcnpx27-source.tar.gz
 ${dist_dir}/mcnp/mcnp602-source.tar.gz

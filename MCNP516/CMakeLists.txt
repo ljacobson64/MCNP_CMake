@@ -9,27 +9,12 @@ file(GLOB SRC_FILES
   "Source/src/*.F90"
 )
 
-# Figure out which version of MCNP we're compiling based on which source files are present
-set(MCNP_VERSION Unknown)
+set(MCNP_VERSION 516)
 if ("/${SRC_FILES};" MATCHES "/main.F90;")
-  set(MCNP_VERSION 514)
+  message(STATUS "MCNP${MCNP_VERSION} source files found")
+else ()
+  message(FATAL_ERROR "MCNP${MCNP_VERSION} source files not found in MCNP${MCNP_VERSION}/Source")
 endif ()
-# These files are present in 1.51 but not in 1.40
-if ("/${SRC_FILES};" MATCHES "/annihilation_gammas.F90;" AND
-    "/${SRC_FILES};" MATCHES "/phtvr_mod.F90;" AND
-    "/${SRC_FILES};" MATCHES "/read_line.F90;")
-  set(MCNP_VERSION 515)
-endif ()
-# These files are present in 1.60 but not in 1.51
-if ("/${SRC_FILES};" MATCHES "/isotopic_mod.F90;" AND
-    "/${SRC_FILES};" MATCHES "/kadjoint_mod.F90;" AND
-    "/${SRC_FILES};" MATCHES "/kinetics_mod.F90;")
-  set(MCNP_VERSION 516)
-endif ()
-if (MCNP_VERSION STREQUAL "Unknown")
-  message(FATAL_ERROR "MCNP516 source files not found in MCNP516/Source")
-endif ()
-message(STATUS "MCNP516 source files found")
 
 # C compiler flags
 if (CMAKE_C_COMPILER_ID STREQUAL "Intel")
@@ -59,11 +44,7 @@ endif ()
 
 # Preprocessor directives
 add_definitions(-DKODE="mcnp")
-if (MCNP_VERSION STREQUAL "1.60")
-  add_definitions(-DTHREAD="MCNP5")
-else ()
-  add_definitions(-DTHREAD="MCNP5_RSICC")
-endif ()
+add_definitions(-DTHREAD="MCNP5")
 add_definitions(-DTVERS="${MCNP_VERSION}")
 add_definitions(-DLODDAT="${ENV_DATE}")
 add_definitions(-DLINUX=ON)
@@ -78,13 +59,13 @@ add_definitions(-DF90_INT_4BYTE=ON)
 add_definitions(-DF90_REAL_8BYTE=ON)
 
 # Make sure DATAPATH is set
-if (MCNP516_DATAPATH)
-  add_definitions(-DDPATH="${MCNP516_DATAPATH}")
+if (MCNP${MCNP_VERSION}_DATAPATH)
+  add_definitions(-DDPATH="${MCNP${MCNP_VERSION}_DATAPATH}")
 else ()
   if (DEFINED ENV{DATAPATH})
     add_definitions(-DDPATH="$ENV{DATAPATH}")
   else ()
-    message(FATAL_ERROR "MCNP516 DATAPATH not set. Either the environment variable DATAPATH or the CMake variable DMCNP516_DATAPATH must be set.")
+    message(FATAL_ERROR "MCNP${MCNP_VERSION} DATAPATH not set. Either the environment variable DATAPATH or the CMake variable DMCNP${MCNP_VERSION}_DATAPATH must be set.")
   endif ()
 endif ()
 
@@ -137,10 +118,10 @@ else ()
 endif ()
 
 get_directory_property(COMPDEFS COMPILE_DEFINITIONS)
-message(STATUS "MCNP516 C_FLAGS: ${CMAKE_C_FLAGS}")
-message(STATUS "MCNP516 CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
-message(STATUS "MCNP516 Fortran_FLAGS: ${CMAKE_Fortran_FLAGS}")
-message(STATUS "MCNP516 compile definitions: ${COMPDEFS}")
+message(STATUS "MCNP${MCNP_VERSION} C_FLAGS: ${CMAKE_C_FLAGS}")
+message(STATUS "MCNP${MCNP_VERSION} CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+message(STATUS "MCNP${MCNP_VERSION} Fortran_FLAGS: ${CMAKE_Fortran_FLAGS}")
+message(STATUS "MCNP${MCNP_VERSION} compile definitions: ${COMPDEFS}")
 
 # Install
 mcnp_install_exe(${MCNP_EXEC})

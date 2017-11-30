@@ -18,15 +18,12 @@ file(GLOB SRC_FILES
   "Source/mcnpx/spabi/*.F"
 )
 
-# Figure out which version of MCNP we're compiling based on which source files are present
-set(MCNP_VERSION Unknown)
-if ("/${SRC_FILES};" MATCHES "/main.F;")
-  set(MCNP_VERSION x27)
+set(MCNP_VERSION X27)
+if ("/${SRC_FILES};" MATCHES "/main.F90;")
+  message(STATUS "MCNP${MCNP_VERSION} source files found")
+else ()
+  message(FATAL_ERROR "MCNP${MCNP_VERSION} source files not found in MCNP${MCNP_VERSION}/Source")
 endif ()
-if (MCNP_VERSION STREQUAL "Unknown")
-  message(FATAL_ERROR "MCNPX27 source files not found in MCNPX27/Source")
-endif ()
-message(STATUS "MCNPX27 source files found")
 
 # Include directories
 include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/include)
@@ -57,13 +54,13 @@ endif ()
 add_definitions(-DF90=ON)
 
 # Make sure DATAPATH is set
-if (MCNPX27_DATAPATH)
-  add_definitions(-DDPATH="${MCNPX27_DATAPATH}")
+if (MCNP${MCNP_VERSION}_DATAPATH)
+  add_definitions(-DDPATH="${MCNP${MCNP_VERSION}_DATAPATH}")
 else ()
   if (DEFINED ENV{DATAPATH})
     add_definitions(-DDPATH="$ENV{DATAPATH}")
   else ()
-    message(FATAL_ERROR "MCNPX27 DATAPATH not set. Either the environment variable DATAPATH or the CMake variable DMCNPX27_DATAPATH must be set.")
+    message(FATAL_ERROR "MCNP${MCNP_VERSION} DATAPATH not set. Either the environment variable DATAPATH or the CMake variable DMCNP${MCNP_VERSION}_DATAPATH must be set.")
   endif ()
 endif ()
 
@@ -91,18 +88,18 @@ endif ()
 
 # Executable
 if (MPI_BUILD)
-  set(MCNP_EXEC "mcnp${MCNP_VERSION}.mpi")
+  set(MCNP_EXEC "mcnpx27.mpi")
   set(MCNP_EXEC_SYM "mcnpx.mpi")
 else ()
-  set(MCNP_EXEC "mcnp${MCNP_VERSION}")
+  set(MCNP_EXEC "mcnpx27")
   set(MCNP_EXEC_SYM "mcnpx")
 endif ()
 
 get_directory_property(COMPDEFS COMPILE_DEFINITIONS)
-message(STATUS "MCNPX27 C_FLAGS: ${CMAKE_C_FLAGS}")
-message(STATUS "MCNPX27 CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
-message(STATUS "MCNPX27 Fortran_FLAGS: ${CMAKE_Fortran_FLAGS}")
-message(STATUS "MCNPX27 compile definitions: ${COMPDEFS}")
+message(STATUS "MCNP${MCNP_VERSION} C_FLAGS: ${CMAKE_C_FLAGS}")
+message(STATUS "MCNP${MCNP_VERSION} CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+message(STATUS "MCNP${MCNP_VERSION} Fortran_FLAGS: ${CMAKE_Fortran_FLAGS}")
+message(STATUS "MCNP${MCNP_VERSION} compile definitions: ${COMPDEFS}")
 
 # Install
 mcnp_install_exe(${MCNP_EXEC})

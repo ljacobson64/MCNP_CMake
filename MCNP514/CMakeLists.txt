@@ -4,26 +4,12 @@ set(LINK_LIBS)
 
 # Source files
 file(GLOB SRC_FILES
-  "Source/dedx/*.F90"
-  "Source/hexs/*.F90"
-  "Source/import/*.cpp"
-  "Source/import/*.f"
-  "Source/import/*.F"
-  "Source/import/*.F90"
-  "Source/import/cgm/*.c"
-  "Source/import/cgm/*.cpp"
-  "Source/lcs/*.F90"
-  "Source/meshtal/*.F90"
-  "Source/regl/*.F90"
-  "Source/spabi/*.F90"
   "Source/src/*.c"
+  "Source/src/*.cpp"
   "Source/src/*.F90"
-  "Source/src/partisn/*.F90"
-  "Source/src/utils/*.c"
-  "Source/src/utils/*.F90"
 )
 
-set(MCNP_VERSION 611)
+set(MCNP_VERSION 514)
 if ("/${SRC_FILES};" MATCHES "/main.F90;")
   message(STATUS "MCNP${MCNP_VERSION} source files found")
 else ()
@@ -45,25 +31,21 @@ if (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -traceback")
   #set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -mcmodel=medium")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -pc64")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -diag-disable 8290,8291,8577")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8")
 else ()
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -m64")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -mieee-fp")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdollar-ok")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fno-sign-zero")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-real-8")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-double-8")
+  if (MCNP_PLOT)
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-real-8")
+  endif ()
 endif ()
-
-# Include directories
-include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/import)
-include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/import/cgm)
 
 # Preprocessor directives
 add_definitions(-DKODE="mcnp")
-add_definitions(-DTHREAD="MCNP")
-add_definitions(-DTVERS="6.1.1b")
+add_definitions(-DTHREAD="MCNP5_RSICC")
+add_definitions(-DTVERS="${MCNP_VERSION}")
 add_definitions(-DLODDAT="${ENV_DATE}")
 add_definitions(-DLINUX=ON)
 add_definitions(-DUNIX=ON)
@@ -73,23 +55,8 @@ if (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
 else ()
   add_definitions(-DGFORTRAN=ON)
 endif ()
-add_definitions(-DLLNL_FISS=ON)
 add_definitions(-DF90_INT_4BYTE=ON)
 add_definitions(-DF90_REAL_8BYTE=ON)
-add_definitions(-DCGM=ON)
-add_definitions(-DCEM=ON)
-add_definitions(-DCEM_M6=ON)
-add_definitions(-DCINDER=ON)
-add_definitions(-DLAQGSM=ON)
-add_definitions(-DUOD=ON)
-add_definitions(-DENV_USER="${ENV_USER}")
-add_definitions(-DENV_HOST="${ENV_HOST}")
-add_definitions(-DENV_OS="${ENV_OS}")
-add_definitions(-DENV_DATE="${ENV_DATE}")
-add_definitions(-DENV_TIME="${ENV_TIME}")
-add_definitions(-DENV_CC="${CMAKE_C_COMPILER}")
-add_definitions(-DENV_CXX="${CMAKE_CXX_COMPILER}")
-add_definitions(-DENV_F90="${CMAKE_Fortran_COMPILER}")
 
 # Make sure DATAPATH is set
 if (MCNP${MCNP_VERSION}_DATAPATH)
@@ -106,6 +73,7 @@ endif ()
 if (MCNP_PLOT)
   find_package(X11 REQUIRED)
   add_definitions(-DPLOT=ON)
+  add_definitions(-DMCPLOT=ON)
   add_definitions(-DXLIB=ON)
   list(APPEND LINK_LIBS ${X11_LIBRARIES})
   if (BUILD_STATIC_EXE)
@@ -125,54 +93,28 @@ endif ()
 # MPI
 if (MPI_BUILD)
   find_package(MPI REQUIRED)
-  add_definitions(-DVERS="6.mpi")
+  file(GLOB SRC_FILES ${SRC_FILES} "Source/dotcomm/src/*.F90")
+  file(GLOB SRC_FILES ${SRC_FILES} "Source/dotcomm/src/internals/mpi/*.c")
+  add_definitions(-DVERS="5.mpi")
+  add_definitions(-DMULTP=ON)
   add_definitions(-DMPI=ON)
+  add_definitions(-DDMMP_NAME="mcnp5.mpi")
+  add_definitions(-D_DOTCOMM_MPI=ON)
   list(APPEND LINK_LIBS ${MPI_Fortran_LIBRARIES})
   include_directories(${MPI_INCLUDE_PATH})
-  list(GET MPI_Fortran_INCLUDE_PATH 0 ENV_MPI_ROOT)
-  get_filename_component(temp "${ENV_MPI_ROOT}" NAME)
-  if (temp STREQUAL "include" OR temp STREQUAL "lib")
-    get_filename_component(ENV_MPI_ROOT "${ENV_MPI_ROOT}" DIRECTORY)
-  endif ()
-  get_filename_component(ENV_MPI_ROOT "${ENV_MPI_ROOT}" REALPATH)
-  add_definitions(-DENV_MPI_ROOT="${ENV_MPI_ROOT}")
+  include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/dotcomm/include)
+  include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/dotcomm/src/internals/mpi)
 else ()
-  add_definitions(-DVERS="6")
+  add_definitions(-DVERS="5")
 endif ()
-
-# Get list of boolean compiler definitions set to ON
-get_directory_property(COMPDEFS_TMP COMPILE_DEFINITIONS)
-set(COMPDEFS)
-foreach (definition IN LISTS COMPDEFS_TMP)
-  if (${definition} MATCHES ".*=ON")
-    list(APPEND COMPDEFS ${definition})
-  endif ()
-endforeach ()
-list(REMOVE_DUPLICATES COMPDEFS)
-list(SORT COMPDEFS)
-string(REPLACE "=ON" " " COMPDEFS ${COMPDEFS})
-string(STRIP "${COMPDEFS}" COMPDEFS)
-separate_arguments(COMPDEFS)
-list(LENGTH COMPDEFS NUM_COMPDEFS)
-# Choose a number that will be greater than the number of definitions
-# but not too much greater, as there will be a number of blank lines
-# equal to the difference. Currently the most that can appear is 17.
-foreach (i RANGE 20)
-  if (i LESS NUM_COMPDEFS)
-    list(GET COMPDEFS ${i} COMPDEF_CURRENT)
-    add_definitions(-DCOMPDEF_${i}="${COMPDEF_CURRENT}")
-  else ()
-    add_definitions(-DCOMPDEF_${i}="")
-  endif ()
-endforeach ()
 
 # Executable
 if (MPI_BUILD)
   set(MCNP_EXEC "mcnp${MCNP_VERSION}.mpi")
-  set(MCNP_EXEC_SYM "mcnp6.mpi")
+  set(MCNP_EXEC_SYM "mcnp5.mpi")
 else ()
   set(MCNP_EXEC "mcnp${MCNP_VERSION}")
-  set(MCNP_EXEC_SYM "mcnp6")
+  set(MCNP_EXEC_SYM "mcnp5")
 endif ()
 
 get_directory_property(COMPDEFS COMPILE_DEFINITIONS)
@@ -185,3 +127,6 @@ message(STATUS "MCNP${MCNP_VERSION} compile definitions: ${COMPDEFS}")
 mcnp_install_exe(${MCNP_EXEC})
 set_target_properties(${MCNP_EXEC} PROPERTIES LINKER_LANGUAGE Fortran)
 mcnp_symlink_exe(${MCNP_EXEC} ${MCNP_EXEC_SYM})
+if (NOT BUILD_MCNP515 AND NOT BUILD_MCNP516)
+  mcnp_symlink_exe(${MCNP_EXEC} ${MCNP_EXEC_SYM})
+endif ()

@@ -33,6 +33,8 @@ endmacro ()
 macro (mcnp_setup_options)
   message("")
 
+  option(BUILD_MCNP514    "Build MCNP514"               OFF)
+  option(BUILD_MCNP515    "Build MCNP515"               OFF)
   option(BUILD_MCNP516    "Build MCNP516"               OFF)
   option(BUILD_MCNPX27    "Build MCNPX27"               OFF)
   option(BUILD_MCNP610    "Build MCNP610"               OFF)
