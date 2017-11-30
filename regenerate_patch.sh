@@ -3,7 +3,7 @@
 mkdir -p patch
 rm -f temp
 
-versions="516 X27 610 611"
+versions="516 X27 602 610 611"
 
 for version in ${versions}; do
   folder=MCNP${version}

@@ -1,0 +1,118 @@
+diff -rN '--unified=0' MCNP602/Source/import/frgcpa_.inc MCNP602/Source_new/import/frgcpa_.inc
+--- MCNP602/Source/import/frgcpa_.inc
++++ MCNP602/Source_new/import/frgcpa_.inc
+@@ -3 +3 @@
+-!$OMP THREADPRIVATE (/FRGCPA_/)
++! !$OMP THREADPRIVATE (/FRGCPA_/)
+diff -rN '--unified=0' MCNP602/Source/import/frgspa_.inc MCNP602/Source_new/import/frgspa_.inc
+--- MCNP602/Source/import/frgspa_.inc
++++ MCNP602/Source_new/import/frgspa_.inc
+@@ -3 +3 @@
+-!$OMP THREADPRIVATE (/FRGSPA_/)
++! !$OMP THREADPRIVATE (/FRGSPA_/)
+diff -rN '--unified=0' MCNP602/Source/import/jwork.inc MCNP602/Source_new/import/jwork.inc
+--- MCNP602/Source/import/jwork.inc
++++ MCNP602/Source_new/import/jwork.inc
+@@ -4 +4 @@
+-!$OMP THREADPRIVATE (/JWORK/)
++! !$OMP THREADPRIVATE (/JWORK/)
+diff -rN '--unified=0' MCNP602/Source/import/strexc.inc MCNP602/Source_new/import/strexc.inc
+--- MCNP602/Source/import/strexc.inc
++++ MCNP602/Source_new/import/strexc.inc
+@@ -3 +3 @@
+-!$OMP THREADPRIVATE (/STREXC/)
++! !$OMP THREADPRIVATE (/STREXC/)
+diff -rN '--unified=0' MCNP602/Source/src/burn_out.F90 MCNP602/Source_new/src/burn_out.F90
+--- MCNP602/Source/src/burn_out.F90
++++ MCNP602/Source_new/src/burn_out.F90
+@@ -418 +418 @@
+-          write (iuo,'(/,a,i5)') ' Material #:',nmt(matb(iq))
++          write (iuo,'(/,a,i8)') ' Material #:',nmt(matb(iq))
+@@ -436 +436 @@
+-      write (iuo,'(//,a,i4,a,es11.4,a)') &
++      write (iuo,'(//,a,i8,a,es11.4,a)') &
+@@ -441 +441 @@
+-      write (iuo,'(//,a,i4,a,es11.4,a)') ' nuclide data are sorted by decreasing activity for material', &
++      write (iuo,'(//,a,i8,a,es11.4,a)') ' nuclide data are sorted by decreasing activity for material', &
+@@ -445 +445 @@
+-      write (iuo,'(//,a,i4,a,es11.4,a)') ' nuclide data are sorted by decreasing specific activity for material', &
++      write (iuo,'(//,a,i8,a,es11.4,a)') ' nuclide data are sorted by decreasing specific activity for material', &
+@@ -449 +449 @@
+-      write (iuo,'(//,a,i4,a,es11.4,a)') ' nuclide data are sorted by increasing zaid for material', &
++      write (iuo,'(//,a,i8,a,es11.4,a)') ' nuclide data are sorted by increasing zaid for material', &
+@@ -454 +454 @@
+-      write (iuo,'(/a,i4,a,i3,a,es9.3,a,es9.3,a,//,a,/,a)')                                &
++      write (iuo,'(/a,i8,a,i3,a,es9.3,a,es9.3,a,//,a,/,a)')                                &
+@@ -468 +468 @@
+-      write (iuo,'(/a,i4,a,i3,a,1p,e9.3,a,a,e9.3,a,//,a,/,a)') &
++      write (iuo,'(/a,i8,a,i3,a,1p,e9.3,a,a,e9.3,a,//,a,/,a)') &
+diff -rN '--unified=0' MCNP602/Source/src/charged_particle_history.F90 MCNP602/Source_new/src/charged_particle_history.F90
+--- MCNP602/Source/src/charged_particle_history.F90
++++ MCNP602/Source_new/src/charged_particle_history.F90
+@@ -366 +366,5 @@
+-          call uplpos(ut,uold,pbl%i%lev,d,v,0)
++          if (am /= one) then
++            call uplpos(ut,uold,pbl%i%lev,d,v,1)
++          else
++            call uplpos(ut,uold,pbl%i%lev,d,v,0)
++          endif
+diff -rN '--unified=0' MCNP602/Source/src/check_binary_expire.F90 MCNP602/Source_new/src/check_binary_expire.F90
+--- MCNP602/Source/src/check_binary_expire.F90
++++ MCNP602/Source_new/src/check_binary_expire.F90
+@@ -19 +19 @@
+-   use mcnp_env, only : LODDAT
++   use mcnp_env, only : loddat
+diff -rN '--unified=0' MCNP602/Source/src/exemes.F90 MCNP602/Source_new/src/exemes.F90
+--- MCNP602/Source/src/exemes.F90
++++ MCNP602/Source_new/src/exemes.F90
+@@ -275 +275 @@
+-      select case( hm(js) )
++      select case( trim(hm(js)) )
+diff -rN '--unified=0' MCNP602/Source/src/gkssim.F90 MCNP602/Source_new/src/gkssim.F90
+--- MCNP602/Source/src/gkssim.F90
++++ MCNP602/Source_new/src/gkssim.F90
+@@ -4 +4 @@
+-#if defined(PLOT) || defined(MCPLOT)
++#ifdef PLOT
+diff -rN '--unified=0' MCNP602/Source/src/gxsub.F90 MCNP602/Source_new/src/gxsub.F90
+--- MCNP602/Source/src/gxsub.F90
++++ MCNP602/Source_new/src/gxsub.F90
+@@ -3 +3 @@
+-#if defined(PLOT) || defined(MCPLOT)
++#ifdef PLOT
+diff -rN '--unified=0' MCNP602/Source/src/main.F90 MCNP602/Source_new/src/main.F90
+--- MCNP602/Source/src/main.F90
++++ MCNP602/Source_new/src/main.F90
+@@ -64 +64 @@
+-  use mcnp_env, only : HDPTH0, KOD, LODDAT, VER
++  use mcnp_env, only : hdpth0, kod, loddat, ver
+diff -rN '--unified=0' MCNP602/Source/src/mcnp_env.F90 MCNP602/Source_new/src/mcnp_env.F90
+--- MCNP602/Source/src/mcnp_env.F90
++++ MCNP602/Source_new/src/mcnp_env.F90
+@@ -0,0 +1,14 @@
++
++  module mcnp_env
++    !
++    ! code & environment info for mcnp
++    !
++
++    character(len=8), parameter ::  kod            = KODE
++    character(len=5), parameter ::  ver            = VERS
++    character(len=20),parameter ::  thread         = THREAD
++    character(len=20),parameter ::  thread_version = TVERS
++    character(len=8), parameter ::  loddat         = LODDAT
++    character(len=*), parameter ::  hdpth0         = DPATH
++
++  end module mcnp_env
+diff -rN '--unified=0' MCNP602/Source/src/torus.F90 MCNP602/Source_new/src/torus.F90
+--- MCNP602/Source/src/torus.F90
++++ MCNP602/Source_new/src/torus.F90
+@@ -91 +91,7 @@
+-      if( abs(t3)<=z0 )  go to 40
++      if( abs(t3)<=z0 ) then
++        if (xx(m) < 0.) then
++          cycle DO_60
++        else
++          go to 40
++        endif
++      endif

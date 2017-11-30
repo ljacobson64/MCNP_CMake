@@ -10,6 +10,12 @@ diff -rN '--unified=0' MCNP611/Source/import/frgspa_.inc MCNP611/Source_new/impo
 @@ -3 +3 @@
 -!$OMP THREADPRIVATE (/FRGSPA_/)
 +! !$OMP THREADPRIVATE (/FRGSPA_/)
+diff -rN '--unified=0' MCNP611/Source/import/strexc.inc MCNP611/Source_new/import/strexc.inc
+--- MCNP611/Source/import/strexc.inc
++++ MCNP611/Source_new/import/strexc.inc
+@@ -3 +3 @@
+-!$OMP THREADPRIVATE (/STREXC/)
++! !$OMP THREADPRIVATE (/STREXC/)
 diff -rN '--unified=0' MCNP611/Source/src/burn_out.F90 MCNP611/Source_new/src/burn_out.F90
 --- MCNP611/Source/src/burn_out.F90
 +++ MCNP611/Source_new/src/burn_out.F90

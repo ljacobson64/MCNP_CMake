@@ -1,5 +1,5 @@
 These files allow for users to build
-MCNP516, MCNPX27, MCNP610, and MCNP611
+MCNP516, MCNPX27, MCNP602, MCNP610, and MCNP611
 with CMake.
 
 Build example:
@@ -18,6 +18,7 @@ mkdir bld
 cd bld
 cmake ../src -DBUILD_MCNP516=ON \
              -DBUILD_MCNPX27=ON \
+             -DBUILD_MCNP602=ON \
              -DBUILD_MCNP610=ON \
              -DBUILD_MCNP611=ON \
              -DMCNP_PLOT=ON \
@@ -31,6 +32,7 @@ The MCNP tarballs should be named like this:
 ```
 ${dist_dir}/mcnp/mcnp516-source.tar.gz
 ${dist_dir}/mcnp/mcnpx27-source.tar.gz
+${dist_dir}/mcnp/mcnp602-source.tar.gz
 ${dist_dir}/mcnp/mcnp610-source.tar.gz
 ${dist_dir}/mcnp/mcnp611-source.tar.gz
 ```
