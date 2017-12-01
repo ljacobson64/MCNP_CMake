@@ -57,7 +57,7 @@ endmacro ()
 macro (mcnp_setup_flags)
   message("")
 
-  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+  #set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
   set(CXX_LIBRARY)
   foreach (library IN LISTS CMAKE_CXX_IMPLICIT_LINK_LIBRARIES)
