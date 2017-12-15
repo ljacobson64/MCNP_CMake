@@ -5,13 +5,13 @@ The build system that ships with the MCNP source code from RSICC is often
 annoying to use, requiring users to use undocumented config commands, or even
 broken. This repository contains CMake files that are intended to replace MCNP's
 build system. The versions of MCNP supported are
-* 514 (MCNP5 version 5.1.40),
-* 515 (MCNP5 version 5.1.50 or 5.1.51),
-* 516 (MCNP5 version 5.1.60),
-* X27 (MCNPX version 2.7.0),
-* 602 (MCNP6 version 6_beta2),
-* 610 (MCNP6 version 6.1), and
-* 611 (MCNP6 version 6.1.1beta).
+* ``514`` (MCNP5 version 5.1.40),
+* ``515`` (MCNP5 version 5.1.50 or 5.1.51),
+* ``516`` (MCNP5 version 5.1.60),
+* ``X27`` (MCNPX version 2.7.0),
+* ``602`` (MCNP6 version 6_beta2),
+* ``610`` (MCNP6 version 6.1), and
+* ``611`` (MCNP6 version 6.1.1beta).
 
 Support for MCNP6 version 6.2 will be added shortly after it becomes available
 from RSICC.
@@ -47,6 +47,7 @@ $ mkdir MCNP
 $ cd MCNP
 $ git clone https://github.com/ljacobson64/MCNP_CMake
 <manually copy the MCNP source code to the correct directories>
+$ ./patch.sh
 $ ln -s MCNP_CMake src
 $ mkdir bld
 $ cd bld

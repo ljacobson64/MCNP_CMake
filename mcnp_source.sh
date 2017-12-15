@@ -15,10 +15,4 @@ cp -r MCNPX27/Source MCNPX27/Source_orig
 cp -r MCNP602/Source MCNP602/Source_orig
 cp -r MCNP610/Source MCNP610/Source_orig
 cp -r MCNP611/Source MCNP611/Source_orig
-patch -p0 < patch/mcnp514.patch
-patch -p0 < patch/mcnp515.patch
-patch -p0 < patch/mcnp516.patch
-patch -p0 < patch/mcnpx27.patch
-patch -p0 < patch/mcnp602.patch
-patch -p0 < patch/mcnp610.patch
-patch -p0 < patch/mcnp611.patch
+./patch.sh
