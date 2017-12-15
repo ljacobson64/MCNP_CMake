@@ -31,10 +31,10 @@ The following build options control which version of MCNP are built.
 
 The following build options control features that apply to all version of MCNP.
 
-* ``-DCMAKE_BUILD_TYPE``        Build configuration (i.e. Release, Debug, RelWithDebInfo; default is Release)
-* ``-DCMAKE_C_COMPILER``        C compiler (i.e. gcc, icc)
-* ``-DCMAKE_CXX_COMPILER``      C++ compiler (i.e. g++, icpc)
-* ``-DCMAKE_Fortran_COMPILER``  Fortran compiler (i.e. gfortran, ifort)
+* ``-DCMAKE_BUILD_TYPE``        Build configuration (Release/Debug/RelWithDebInfo; default is Release)
+* ``-DCMAKE_C_COMPILER``        C compiler (e.g. gcc, icc, mpicc)
+* ``-DCMAKE_CXX_COMPILER``      C++ compiler (e.g. g++, icpc, mpic++)
+* ``-DCMAKE_Fortran_COMPILER``  Fortran compiler (e.g. gfortran, ifort, mpifort)
 * ``-DMCNP_PLOT``               Build with plotting capability (ON/OFF; default is OFF)
 * ``-DOPENMP_BUILD``            Build with OpenMP support (ON/OFF; default is OFF)
 * ``-DMPI_BUILD``               Build with MPI support (ON/OFF; default is OFF)
@@ -45,6 +45,7 @@ Build example
 ```
 $ mkdir MCNP
 $ cd MCNP
+$ install_prefix=${PWD}
 $ git clone https://github.com/ljacobson64/MCNP_CMake
 <manually copy the MCNP source code to the correct directories>
 $ ./patch.sh
