@@ -65,7 +65,7 @@ else ()
 endif ()
 
 # MCNP Plotter
-if (MCNP_PLOT)
+if (BUILD_PLOT)
   find_package(X11 REQUIRED)
   add_definitions(-DPLOT=ON)
   add_definitions(-DMCPLOT=ON)
@@ -78,7 +78,7 @@ if (MCNP_PLOT)
 endif ()
 
 # MPI
-if (MPI_BUILD)
+if (BUILD_MPI)
   find_package(MPI REQUIRED)
   add_definitions(-DMULTP=ON)
   add_definitions(-DMPI=ON)
@@ -87,7 +87,7 @@ if (MPI_BUILD)
 endif ()
 
 # Executable
-if (MPI_BUILD)
+if (BUILD_MPI)
   set(MCNP_EXEC "mcnpx27.mpi")
   set(MCNP_EXEC_SYM "mcnpx.mpi")
 else ()
