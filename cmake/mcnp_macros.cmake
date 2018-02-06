@@ -152,8 +152,6 @@ macro (mcnp_setup_rpath)
     get_filename_component(Fortran_LIBRARY_PATH ${Fortran_LIBRARY_PATH} ABSOLUTE)
   endif ()
 
-  set(INSTALL_RPATH_DIRS "${CMAKE_INSTALL_PREFIX}/${INSTALL_LIB_DIR}")
-
   if (CXX_LIBRARY_PATH)
     set(INSTALL_RPATH_DIRS "${INSTALL_RPATH_DIRS}:${CXX_LIBRARY_PATH}")
   endif ()
