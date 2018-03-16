@@ -107,77 +107,15 @@ macro (mcnp_setup_flags)
   message(STATUS "CMAKE_EXE_LINKER_FLAGS: ${CMAKE_EXE_LINKER_FLAGS}")
 endmacro ()
 
-macro (mcnp_setup_rpath)
-  message("")
-
-  # Attempt to find CXX library path
-  get_filename_component(CXX_COMPILER_ROOT ${CMAKE_CXX_COMPILER} DIRECTORY)
-  get_filename_component(CXX_COMPILER_ROOT ${CXX_COMPILER_ROOT} DIRECTORY)
-  if (CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-    get_filename_component(CXX_COMPILER_ROOT ${CXX_COMPILER_ROOT} DIRECTORY)
-    find_path(CXX_LIBRARY_PATH
-      NAMES "libimf.so"
-      HINTS ${CXX_COMPILER_ROOT}
-      PATH_SUFFIXES compiler/lib/intel64
-    )
-  else ()
-    find_path(CXX_LIBRARY_PATH
-      NAMES "libstdc++.so"
-      HINTS ${CXX_COMPILER_ROOT}
-      PATH_SUFFIXES lib64 lib32 lib
-    )
-  endif ()
-  if (CXX_LIBRARY_PATH)
-    get_filename_component(CXX_LIBRARY_PATH ${CXX_LIBRARY_PATH} ABSOLUTE)
-  endif ()
-
-  # Attempt to find Fortran library path
-  get_filename_component(Fortran_COMPILER_ROOT ${CMAKE_Fortran_COMPILER} DIRECTORY)
-  get_filename_component(Fortran_COMPILER_ROOT ${Fortran_COMPILER_ROOT} DIRECTORY)
-  if (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
-    get_filename_component(Fortran_COMPILER_ROOT ${Fortran_COMPILER_ROOT} DIRECTORY)
-    find_path(Fortran_LIBRARY_PATH
-      NAMES "libimf.so"
-      HINTS ${Fortran_COMPILER_ROOT}
-      PATH_SUFFIXES compiler/lib/intel64
-    )
-  else ()
-    find_path(Fortran_LIBRARY_PATH
-      NAMES "libgfortran.so"
-      HINTS ${Fortran_COMPILER_ROOT}
-      PATH_SUFFIXES lib64 lib32 lib
-    )
-  endif ()
-  if (Fortran_LIBRARY_PATH)
-    get_filename_component(Fortran_LIBRARY_PATH ${Fortran_LIBRARY_PATH} ABSOLUTE)
-  endif ()
-
-  if (CXX_LIBRARY_PATH)
-    set(INSTALL_RPATH_DIRS "${INSTALL_RPATH_DIRS}:${CXX_LIBRARY_PATH}")
-  endif ()
-  if (Fortran_LIBRARY_PATH AND (NOT Fortran_LIBRARY_PATH STREQUAL CXX_LIBRARY_PATH))
-    set(INSTALL_RPATH_DIRS "${INSTALL_RPATH_DIRS}:${Fortran_LIBRARY_PATH}")
-  endif ()
-
-  message(STATUS "INSTALL_RPATH_DIRS: ${INSTALL_RPATH_DIRS}")
-endmacro ()
-
 # Install an executable
 macro (mcnp_install_exe exe_name)
   message(STATUS "Building executable: ${exe_name}")
 
   add_executable(${exe_name} ${SRC_FILES})
-  if (BUILD_STATIC_EXE)
-    set_target_properties(${exe_name}
-      PROPERTIES INSTALL_RPATH ""
-                 INSTALL_RPATH_USE_LINK_PATH FALSE)
-    target_link_libraries(${exe_name} ${LINK_LIBS})
-  else ()
-    set_target_properties(${exe_name}
-      PROPERTIES INSTALL_RPATH "${INSTALL_RPATH_DIRS}"
-                 INSTALL_RPATH_USE_LINK_PATH TRUE)
-    target_link_libraries(${exe_name} ${LINK_LIBS})
+  if (NOT BUILD_STATIC_EXE)
+    set_target_properties(${exe_name} PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
   endif ()
+  target_link_libraries(${exe_name} ${LINK_LIBS})
   install(TARGETS ${exe_name} DESTINATION ${INSTALL_BIN_DIR})
 endmacro ()
 

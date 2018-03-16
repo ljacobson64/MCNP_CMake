@@ -9,7 +9,6 @@ include(mcnp_macros)
 mcnp_setup_build()
 mcnp_setup_options()
 mcnp_setup_flags()
-mcnp_setup_rpath()
 
 if (BUILD_MCNP514)
   add_subdirectory(MCNP514)
