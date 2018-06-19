@@ -43,9 +43,21 @@ diff -rN '--unified=0' MCNP602/Source/src/burn_out.F90 MCNP602/Source_new/src/bu
 @@ -454 +454 @@
 -      write (iuo,'(/a,i4,a,i3,a,es9.3,a,es9.3,a,//,a,/,a)')                                &
 +      write (iuo,'(/a,i8,a,i3,a,es9.3,a,es9.3,a,//,a,/,a)')                                &
+@@ -462 +462 @@
+-        write (iuo,'(i4,i7,6es11.3)') iz,nx_nm(2,im,ib),bt_nm(2,im,1:6,ib)
++        write (iuo,'(i4,i7,6es15.7)') iz,nx_nm(2,im,ib),bt_nm(2,im,1:6,ib)
+@@ -464 +464 @@
+-      write (iuo,'(a,6es11.3)') '     totals',bt_n(2,n,1:6,ib)
++      write (iuo,'(a,6es15.7)') '     totals',bt_n(2,n,1:6,ib)
 @@ -468 +468 @@
 -      write (iuo,'(/a,i4,a,i3,a,1p,e9.3,a,a,e9.3,a,//,a,/,a)') &
 +      write (iuo,'(/a,i8,a,i3,a,1p,e9.3,a,a,e9.3,a,//,a,/,a)') &
+@@ -476 +476 @@
+-        write (iuo,'(i4,i7,6es11.3)') iz,nx_nm(1,im,ib),bt_nm(1,im,1:6,ib)
++        write (iuo,'(i4,i7,6es15.7)') iz,nx_nm(1,im,ib),bt_nm(1,im,1:6,ib)
+@@ -478 +478 @@
+-      write (iuo,'(a,6es11.3,1x)') '     totals',bt_n(1,n,1:6,ib)
++      write (iuo,'(a,6es15.7,1x)') '     totals',bt_n(1,n,1:6,ib)
 diff -rN '--unified=0' MCNP602/Source/src/charged_particle_history.F90 MCNP602/Source_new/src/charged_particle_history.F90
 --- MCNP602/Source/src/charged_particle_history.F90
 +++ MCNP602/Source_new/src/charged_particle_history.F90
