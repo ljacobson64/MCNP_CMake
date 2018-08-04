@@ -10,8 +10,9 @@ build system. The versions of MCNP supported are
 * ``516`` (MCNP5 version 5.1.60),
 * ``X27`` (MCNPX version 2.7.0),
 * ``602`` (MCNP6 version 6_beta2),
-* ``610`` (MCNP6 version 6.1), and
-* ``611`` (MCNP6 version 6.1.1beta).
+* ``610`` (MCNP6 version 6.1),
+* ``611`` (MCNP6 version 6.1.1beta), and
+* ``620`` (MCNP6 version 6.2).
 
 Support for MCNP6 version 6.2 will be added shortly after it becomes available
 from RSICC.
@@ -28,6 +29,7 @@ The following build options control which version of MCNP are built.
 * ``-DBUILD_MCNP602``  Build MCNP6 version 6_beta2 (``ON``/``OFF``; default is ``OFF``)
 * ``-DBUILD_MCNP610``  Build MCNP6 version 6.1 (``ON``/``OFF``; default is ``OFF``)
 * ``-DBUILD_MCNP611``  Build MCNP6 version 6.1.1beta (``ON``/``OFF``; default is ``OFF``)
+* ``-DBUILD_MCNP620``  Build MCNP6 version 6.2 (``ON``/``OFF``; default is ``OFF``)
 
 The following build options control features that apply to all version of MCNP.
 
@@ -61,6 +63,7 @@ $ cmake ../src -DBUILD_MCNP514=ON \
                -DBUILD_MCNP602=ON \
                -DBUILD_MCNP610=ON \
                -DBUILD_MCNP611=ON \
+               -DBUILD_MCNP620=ON \
                -DBUILD_PLOT=ON \
                -DBUILD_OPENMP=ON \
                -DBUILD_MPI=ON \
@@ -141,6 +144,20 @@ $ tree -d
 │       └── src
 │           ├── partisn
 │           └── utils
+├── MCNP620
+│   ├── Source
+│   │   ├── cgm
+│   │   ├── config
+│   │   ├── dedx
+│   │   ├── hexs
+│   │   ├── import
+│   │   ├── incl_abla
+│   │   ├── lcs
+│   │   ├── llnlfiss
+│   │   ├── regl
+│   │   ├── src
+│   │   │   ├── partisn
+│   │   │   └── utils
 ├── MCNPX27
 │   └── Source
 │       ├── include

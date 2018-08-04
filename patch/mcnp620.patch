@@ -1,0 +1,765 @@
+diff -rN '--unified=0' MCNP620/Source/src/main.F90 MCNP620/Source_new/src/main.F90
+--- MCNP620/Source/src/main.F90
++++ MCNP620/Source_new/src/main.F90
+@@ -63 +63 @@
+-  use mcnp_env, only : HDPTH0, KOD, LODDAT, VER
++  use mcnp_env, only : hdpth0, kod, loddat, ver
+diff -rN '--unified=0' MCNP620/Source/src/mcnp_env.F90 MCNP620/Source_new/src/mcnp_env.F90
+--- MCNP620/Source/src/mcnp_env.F90
++++ MCNP620/Source_new/src/mcnp_env.F90
+@@ -0,0 +1,79 @@
++
++  module mcnp_env
++    !
++    ! code & environment info for mcnp
++    !
++
++    character(len=8), parameter, public ::  kod            = KODE
++    character(len=5), parameter, public ::  ver            = VERS
++    character(len=20),parameter, public ::  thread         = THREAD
++    character(len=20),parameter, public ::  thread_version = TVERS
++    character(len=8), parameter, public ::  loddat         = LODDAT
++    character(len=*), parameter, public ::  hdpth0 &
++      & = 'DATAPATH must be set by user'
++
++    public ::  print_build_info
++  CONTAINS
++    subroutine print_build_info( iunit )
++      integer, intent(in) :: iunit
++
++      write(iunit,*) '  +--------------------------------------------------------------------'
++      write(iunit,*) '  | mcnp6 build information:'
++      write(iunit,*) '  |'
++      write(iunit,*) '  | This executable was built with a custom CMake build, not'
++      write(iunit,*) '  | the build system from the discs supplied by RSICC. See'
++      write(iunit,*) '  | https://github.com/ljacobson64/MCNP_CMake for more'
++      write(iunit,*) '  | information.'
++      write(iunit,*) '  |'
++      write(iunit,*) '  |   user          = ', ENV_USER
++      write(iunit,*) '  |   host          = ', ENV_HOST
++      write(iunit,*) '  |   OS            = ', ENV_OS
++      write(iunit,*) '  |   date          = ', ENV_DATE
++      write(iunit,*) '  |   time          = ', ENV_TIME
++      write(iunit,*) '  |   CONFIG        = '
++      write(iunit,*) '  |   f90           = ', ENV_F90
++      write(iunit,*) '  |   f90 version   = ', ENV_F90_VERS
++      write(iunit,*) '  |   cc            = ', ENV_CC
++      write(iunit,*) '  |   cc  version   = ', ENV_CC_VERS
++      write(iunit,*) '  |   c++           = ', ENV_CXX
++      write(iunit,*) '  |   c++ version   = ', ENV_CXX_VERS
++#ifdef OMP
++      write(iunit,*) '  |   OpenMP        = yes'
++#else
++      write(iunit,*) '  |   OpenMP        = no'
++#endif
++#ifdef MPI
++      write(iunit,*) '  |   MPI           = yes'
++      write(iunit,*) '  |   MPI_ROOT      = ', ENV_MPI_ROOT
++#else
++      write(iunit,*) '  |   MPI           = no'
++      write(iunit,*) '  |   MPI_ROOT      = '
++#endif
++      write(iunit,*) '  |   code          = ', KODE
++      write(iunit,*) '  |   version       = ', VERS
++      write(iunit,*) '  |   thread name   = ', THREAD
++      write(iunit,*) '  |   thread number = ', TVERS
++      write(iunit,*) '  |   datapath      = DATAPATH must be set by user'
++      write(iunit,*) '  |   fpp defs      = '
++      write(iunit,*) '  |                 = ', COMPDEF_0
++      write(iunit,*) '  |                 = ', COMPDEF_1
++      write(iunit,*) '  |                 = ', COMPDEF_2
++      write(iunit,*) '  |                 = ', COMPDEF_3
++      write(iunit,*) '  |                 = ', COMPDEF_4
++      write(iunit,*) '  |                 = ', COMPDEF_5
++      write(iunit,*) '  |                 = ', COMPDEF_6
++      write(iunit,*) '  |                 = ', COMPDEF_7
++      write(iunit,*) '  |                 = ', COMPDEF_8
++      write(iunit,*) '  |                 = ', COMPDEF_9
++      write(iunit,*) '  |                 = ', COMPDEF_10
++      write(iunit,*) '  |                 = ', COMPDEF_11
++      write(iunit,*) '  |                 = ', COMPDEF_12
++      write(iunit,*) '  |                 = ', COMPDEF_13
++      write(iunit,*) '  |                 = ', COMPDEF_14
++      write(iunit,*) '  |                 = ', COMPDEF_15
++      write(iunit,*) '  |                 = ', COMPDEF_16
++      write(iunit,*) '  |                 = ', COMPDEF_17
++
++      write(iunit,*) '  +--------------------------------------------------------------------'
++    end subroutine print_build_info
++  end module mcnp_env
+diff -rN '--unified=0' MCNP620/Source/src/mcnp_storage.F90 MCNP620/Source_new/src/mcnp_storage.F90
+--- MCNP620/Source/src/mcnp_storage.F90
++++ MCNP620/Source_new/src/mcnp_storage.F90
+@@ -63,5 +63,2 @@
+-#FPP_TEMPLATE_BEGIN
+-#FPP_TEMPLATE <name> = r8;         r4;         i8;             i4;             i1
+-#FPP_TEMPLATE <type> = real(DKND); real(RKND); integer(I8KND); integer(I4KND); integer(I1KND)
+-   !================================================================ <name> =======
+-   subroutine mcnp_alloc_<name>_1( name, array, lower1,upper1 )
++   !================================================================ r8 =======
++   subroutine mcnp_alloc_r8_1( name, array, lower1,upper1 )
+@@ -70 +67 @@
+-     <type>, allocatable, intent(inout) :: array( : )
++     real(DKND), allocatable, intent(inout) :: array( : )
+@@ -77 +74 @@
+-       call get_mem_alloc_error( 'mcnp_alloc_<name>_1', name )
++       call get_mem_alloc_error( 'mcnp_alloc_r8_1', name )
+@@ -79,2 +76,2 @@
+-     array = <name>_zero
+-   end subroutine mcnp_alloc_<name>_1
++     array = r8_zero
++   end subroutine mcnp_alloc_r8_1
+@@ -82 +79 @@
+-   subroutine mcnp_alloc_<name>_2( name, array, lower1,upper1, lower2,upper2 )
++   subroutine mcnp_alloc_r8_2( name, array, lower1,upper1, lower2,upper2 )
+@@ -85 +82 @@
+-     <type>, allocatable, intent(inout) :: array( :, : )
++     real(DKND), allocatable, intent(inout) :: array( :, : )
+@@ -93 +90 @@
+-       call get_mem_alloc_error( 'mcnp_alloc_<name>_2', name )
++       call get_mem_alloc_error( 'mcnp_alloc_r8_2', name )
+@@ -95,2 +92,2 @@
+-     array = <name>_zero
+-   end subroutine mcnp_alloc_<name>_2
++     array = r8_zero
++   end subroutine mcnp_alloc_r8_2
+@@ -98 +95 @@
+-   subroutine mcnp_alloc_<name>_3( name, array, lower1,upper1, lower2,upper2,  &
++   subroutine mcnp_alloc_r8_3( name, array, lower1,upper1, lower2,upper2,  &
+@@ -102 +99 @@
+-     <type>, allocatable, intent(inout) :: array( :, :, : )
++     real(DKND), allocatable, intent(inout) :: array( :, :, : )
+@@ -111 +108 @@
+-       call get_mem_alloc_error( 'mcnp_alloc_<name>_3', name )
++       call get_mem_alloc_error( 'mcnp_alloc_r8_3', name )
+@@ -113,2 +110,2 @@
+-     array = <name>_zero
+-   end subroutine mcnp_alloc_<name>_3
++     array = r8_zero
++   end subroutine mcnp_alloc_r8_3
+@@ -116 +113 @@
+-   subroutine mcnp_alloc_<name>_4( name, array, lower1,upper1, lower2,upper2,  &
++   subroutine mcnp_alloc_r8_4( name, array, lower1,upper1, lower2,upper2,  &
+@@ -120 +117 @@
+-     <type>, allocatable, intent(inout) :: array( :, :, :, : )
++     real(DKND), allocatable, intent(inout) :: array( :, :, :, : )
+@@ -131 +128 @@
+-       call get_mem_alloc_error( 'mcnp_alloc_<name>_4', name )
++       call get_mem_alloc_error( 'mcnp_alloc_r8_4', name )
+@@ -133,2 +130,2 @@
+-     array = <name>_zero
+-   end subroutine mcnp_alloc_<name>_4
++     array = r8_zero
++   end subroutine mcnp_alloc_r8_4
+@@ -136 +133 @@
+-   subroutine mcnp_alloc_<name>_5( name, array, lower1,upper1, lower2,upper2,  &
++   subroutine mcnp_alloc_r8_5( name, array, lower1,upper1, lower2,upper2,  &
+@@ -141 +138 @@
+-     <type>, allocatable, intent(inout) :: array( :, :, :, :, : )
++     real(DKND), allocatable, intent(inout) :: array( :, :, :, :, : )
+@@ -153 +150 @@
+-       call get_mem_alloc_error( 'mcnp_alloc_<name>_5', name )
++       call get_mem_alloc_error( 'mcnp_alloc_r8_5', name )
+@@ -155,2 +152,2 @@
+-     array = <name>_zero
+-   end subroutine mcnp_alloc_<name>_5
++     array = r8_zero
++   end subroutine mcnp_alloc_r8_5
+@@ -158 +155 @@
+-   subroutine mcnp_alloc_<name>_6( name, array, lower1,upper1, lower2,upper2,  &
++   subroutine mcnp_alloc_r8_6( name, array, lower1,upper1, lower2,upper2,  &
+@@ -163 +160 @@
+-     <type>, allocatable, intent(inout) :: array( :, :, :, :, :, : )
++     real(DKND), allocatable, intent(inout) :: array( :, :, :, :, :, : )
+@@ -176 +173 @@
+-       call get_mem_alloc_error( 'mcnp_alloc_<name>_6', name )
++       call get_mem_alloc_error( 'mcnp_alloc_r8_6', name )
+@@ -178,2 +175,2 @@
+-     array = <name>_zero
+-   end subroutine mcnp_alloc_<name>_6
++     array = r8_zero
++   end subroutine mcnp_alloc_r8_6
+@@ -181 +178 @@
+-   subroutine mcnp_alloc_<name>_7( name, array, lower1,upper1, lower2,upper2,  &
++   subroutine mcnp_alloc_r8_7( name, array, lower1,upper1, lower2,upper2,  &
+@@ -187 +184 @@
+-     <type>, allocatable, intent(inout) :: array( :, :, :, :, :, :, : )
++     real(DKND), allocatable, intent(inout) :: array( :, :, :, :, :, :, : )
+@@ -202 +199 @@
+-       call get_mem_alloc_error( 'mcnp_alloc_<name>_7', name )
++       call get_mem_alloc_error( 'mcnp_alloc_r8_7', name )
+@@ -204,2 +201,570 @@
+-     array = <name>_zero
+-   end subroutine mcnp_alloc_<name>_7
++     array = r8_zero
++   end subroutine mcnp_alloc_r8_7
++   !-----------------------------------------------------------------------------
++
++   !================================================================ r4 =======
++   subroutine mcnp_alloc_r4_1( name, array, lower1,upper1 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     real(RKND), allocatable, intent(inout) :: array( : )
++     integer,             intent(in)    :: lower1, upper1 
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1 ),    stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_r4_1', name )
++     endif
++     array = r4_zero
++   end subroutine mcnp_alloc_r4_1
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_r4_2( name, array, lower1,upper1, lower2,upper2 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     real(RKND), allocatable, intent(inout) :: array( :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2 ),    stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_r4_2', name )
++     endif
++     array = r4_zero
++   end subroutine mcnp_alloc_r4_2
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_r4_3( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     real(RKND), allocatable, intent(inout) :: array( :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_r4_3', name )
++     endif
++     array = r4_zero
++   end subroutine mcnp_alloc_r4_3
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_r4_4( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3, lower4,upper4 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     real(RKND), allocatable, intent(inout) :: array( :, :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer,             intent(in)    :: lower4, upper4
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3, &
++       &                  lower4:upper4 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_r4_4', name )
++     endif
++     array = r4_zero
++   end subroutine mcnp_alloc_r4_4
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_r4_5( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3, lower4,upper4,  &
++     &                                          lower5,upper5 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     real(RKND), allocatable, intent(inout) :: array( :, :, :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer,             intent(in)    :: lower4, upper4
++     integer,             intent(in)    :: lower5, upper5
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3, &
++       &                  lower4:upper4, lower5:upper5 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_r4_5', name )
++     endif
++     array = r4_zero
++   end subroutine mcnp_alloc_r4_5
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_r4_6( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3, lower4,upper4,  &
++     &                                          lower5,upper5, lower6,upper6 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     real(RKND), allocatable, intent(inout) :: array( :, :, :, :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer,             intent(in)    :: lower4, upper4
++     integer,             intent(in)    :: lower5, upper5
++     integer,             intent(in)    :: lower6, upper6
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3, &
++       &                  lower4:upper4, lower5:upper5, lower6:upper6 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_r4_6', name )
++     endif
++     array = r4_zero
++   end subroutine mcnp_alloc_r4_6
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_r4_7( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3, lower4,upper4,  &
++     &                                          lower5,upper5, lower6,upper6,  &
++     &                                          lower7,upper7 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     real(RKND), allocatable, intent(inout) :: array( :, :, :, :, :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer,             intent(in)    :: lower4, upper4
++     integer,             intent(in)    :: lower5, upper5
++     integer,             intent(in)    :: lower6, upper6
++     integer,             intent(in)    :: lower7, upper7
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3, &
++       &                  lower4:upper4, lower5:upper5, lower6:upper6, &
++       &                  lower7:upper7 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_r4_7', name )
++     endif
++     array = r4_zero
++   end subroutine mcnp_alloc_r4_7
++   !-----------------------------------------------------------------------------
++
++   !================================================================ i8 =======
++   subroutine mcnp_alloc_i8_1( name, array, lower1,upper1 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I8KND), allocatable, intent(inout) :: array( : )
++     integer,             intent(in)    :: lower1, upper1 
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1 ),    stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i8_1', name )
++     endif
++     array = i8_zero
++   end subroutine mcnp_alloc_i8_1
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i8_2( name, array, lower1,upper1, lower2,upper2 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I8KND), allocatable, intent(inout) :: array( :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2 ),    stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i8_2', name )
++     endif
++     array = i8_zero
++   end subroutine mcnp_alloc_i8_2
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i8_3( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I8KND), allocatable, intent(inout) :: array( :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i8_3', name )
++     endif
++     array = i8_zero
++   end subroutine mcnp_alloc_i8_3
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i8_4( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3, lower4,upper4 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I8KND), allocatable, intent(inout) :: array( :, :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer,             intent(in)    :: lower4, upper4
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3, &
++       &                  lower4:upper4 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i8_4', name )
++     endif
++     array = i8_zero
++   end subroutine mcnp_alloc_i8_4
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i8_5( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3, lower4,upper4,  &
++     &                                          lower5,upper5 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I8KND), allocatable, intent(inout) :: array( :, :, :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer,             intent(in)    :: lower4, upper4
++     integer,             intent(in)    :: lower5, upper5
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3, &
++       &                  lower4:upper4, lower5:upper5 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i8_5', name )
++     endif
++     array = i8_zero
++   end subroutine mcnp_alloc_i8_5
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i8_6( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3, lower4,upper4,  &
++     &                                          lower5,upper5, lower6,upper6 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I8KND), allocatable, intent(inout) :: array( :, :, :, :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer,             intent(in)    :: lower4, upper4
++     integer,             intent(in)    :: lower5, upper5
++     integer,             intent(in)    :: lower6, upper6
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3, &
++       &                  lower4:upper4, lower5:upper5, lower6:upper6 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i8_6', name )
++     endif
++     array = i8_zero
++   end subroutine mcnp_alloc_i8_6
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i8_7( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3, lower4,upper4,  &
++     &                                          lower5,upper5, lower6,upper6,  &
++     &                                          lower7,upper7 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I8KND), allocatable, intent(inout) :: array( :, :, :, :, :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer,             intent(in)    :: lower4, upper4
++     integer,             intent(in)    :: lower5, upper5
++     integer,             intent(in)    :: lower6, upper6
++     integer,             intent(in)    :: lower7, upper7
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3, &
++       &                  lower4:upper4, lower5:upper5, lower6:upper6, &
++       &                  lower7:upper7 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i8_7', name )
++     endif
++     array = i8_zero
++   end subroutine mcnp_alloc_i8_7
++   !-----------------------------------------------------------------------------
++
++   !================================================================ i4 =======
++   subroutine mcnp_alloc_i4_1( name, array, lower1,upper1 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I4KND), allocatable, intent(inout) :: array( : )
++     integer,             intent(in)    :: lower1, upper1 
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1 ),    stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i4_1', name )
++     endif
++     array = i4_zero
++   end subroutine mcnp_alloc_i4_1
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i4_2( name, array, lower1,upper1, lower2,upper2 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I4KND), allocatable, intent(inout) :: array( :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2 ),    stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i4_2', name )
++     endif
++     array = i4_zero
++   end subroutine mcnp_alloc_i4_2
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i4_3( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I4KND), allocatable, intent(inout) :: array( :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i4_3', name )
++     endif
++     array = i4_zero
++   end subroutine mcnp_alloc_i4_3
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i4_4( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3, lower4,upper4 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I4KND), allocatable, intent(inout) :: array( :, :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer,             intent(in)    :: lower4, upper4
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3, &
++       &                  lower4:upper4 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i4_4', name )
++     endif
++     array = i4_zero
++   end subroutine mcnp_alloc_i4_4
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i4_5( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3, lower4,upper4,  &
++     &                                          lower5,upper5 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I4KND), allocatable, intent(inout) :: array( :, :, :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer,             intent(in)    :: lower4, upper4
++     integer,             intent(in)    :: lower5, upper5
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3, &
++       &                  lower4:upper4, lower5:upper5 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i4_5', name )
++     endif
++     array = i4_zero
++   end subroutine mcnp_alloc_i4_5
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i4_6( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3, lower4,upper4,  &
++     &                                          lower5,upper5, lower6,upper6 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I4KND), allocatable, intent(inout) :: array( :, :, :, :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer,             intent(in)    :: lower4, upper4
++     integer,             intent(in)    :: lower5, upper5
++     integer,             intent(in)    :: lower6, upper6
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3, &
++       &                  lower4:upper4, lower5:upper5, lower6:upper6 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i4_6', name )
++     endif
++     array = i4_zero
++   end subroutine mcnp_alloc_i4_6
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i4_7( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3, lower4,upper4,  &
++     &                                          lower5,upper5, lower6,upper6,  &
++     &                                          lower7,upper7 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I4KND), allocatable, intent(inout) :: array( :, :, :, :, :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer,             intent(in)    :: lower4, upper4
++     integer,             intent(in)    :: lower5, upper5
++     integer,             intent(in)    :: lower6, upper6
++     integer,             intent(in)    :: lower7, upper7
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3, &
++       &                  lower4:upper4, lower5:upper5, lower6:upper6, &
++       &                  lower7:upper7 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i4_7', name )
++     endif
++     array = i4_zero
++   end subroutine mcnp_alloc_i4_7
++   !-----------------------------------------------------------------------------
++
++   !================================================================ i1 =======
++   subroutine mcnp_alloc_i1_1( name, array, lower1,upper1 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I1KND), allocatable, intent(inout) :: array( : )
++     integer,             intent(in)    :: lower1, upper1 
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1 ),    stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i1_1', name )
++     endif
++     array = i1_zero
++   end subroutine mcnp_alloc_i1_1
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i1_2( name, array, lower1,upper1, lower2,upper2 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I1KND), allocatable, intent(inout) :: array( :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2 ),    stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i1_2', name )
++     endif
++     array = i1_zero
++   end subroutine mcnp_alloc_i1_2
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i1_3( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I1KND), allocatable, intent(inout) :: array( :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i1_3', name )
++     endif
++     array = i1_zero
++   end subroutine mcnp_alloc_i1_3
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i1_4( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3, lower4,upper4 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I1KND), allocatable, intent(inout) :: array( :, :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer,             intent(in)    :: lower4, upper4
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3, &
++       &                  lower4:upper4 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i1_4', name )
++     endif
++     array = i1_zero
++   end subroutine mcnp_alloc_i1_4
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i1_5( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3, lower4,upper4,  &
++     &                                          lower5,upper5 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I1KND), allocatable, intent(inout) :: array( :, :, :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer,             intent(in)    :: lower4, upper4
++     integer,             intent(in)    :: lower5, upper5
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3, &
++       &                  lower4:upper4, lower5:upper5 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i1_5', name )
++     endif
++     array = i1_zero
++   end subroutine mcnp_alloc_i1_5
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i1_6( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3, lower4,upper4,  &
++     &                                          lower5,upper5, lower6,upper6 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I1KND), allocatable, intent(inout) :: array( :, :, :, :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer,             intent(in)    :: lower4, upper4
++     integer,             intent(in)    :: lower5, upper5
++     integer,             intent(in)    :: lower6, upper6
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3, &
++       &                  lower4:upper4, lower5:upper5, lower6:upper6 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i1_6', name )
++     endif
++     array = i1_zero
++   end subroutine mcnp_alloc_i1_6
++   !-----------------------------------------------------------------------------
++   subroutine mcnp_alloc_i1_7( name, array, lower1,upper1, lower2,upper2,  &
++     &                                          lower3,upper3, lower4,upper4,  &
++     &                                          lower5,upper5, lower6,upper6,  &
++     &                                          lower7,upper7 )
++     implicit none
++     character(len=*),    intent(in)    :: name
++     integer(I1KND), allocatable, intent(inout) :: array( :, :, :, :, :, :, : )
++     integer,             intent(in)    :: lower1, upper1
++     integer,             intent(in)    :: lower2, upper2
++     integer,             intent(in)    :: lower3, upper3
++     integer,             intent(in)    :: lower4, upper4
++     integer,             intent(in)    :: lower5, upper5
++     integer,             intent(in)    :: lower6, upper6
++     integer,             intent(in)    :: lower7, upper7
++     integer :: ierr
++
++     if( allocated(array) )  deallocate(array)
++     allocate(     array( lower1:upper1, lower2:upper2, lower3:upper3, &
++       &                  lower4:upper4, lower5:upper5, lower6:upper6, &
++       &                  lower7:upper7 ),  stat=ierr )
++     if( ierr /=0 ) then
++       call get_mem_alloc_error( 'mcnp_alloc_i1_7', name )
++     endif
++     array = i1_zero
++   end subroutine mcnp_alloc_i1_7
+@@ -208 +772,0 @@
+-#FPP_TEMPLATE_END

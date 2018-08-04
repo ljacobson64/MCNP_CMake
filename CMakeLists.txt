@@ -31,5 +31,8 @@ endif ()
 if (BUILD_MCNP611)
   add_subdirectory(MCNP611)
 endif ()
+if (BUILD_MCNP620)
+  add_subdirectory(MCNP620)
+endif ()
 
 message("")
