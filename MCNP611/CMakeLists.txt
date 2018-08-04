@@ -184,4 +184,6 @@ message(STATUS "MCNP${MCNP_VERSION} compile definitions: ${COMPDEFS}")
 # Install
 mcnp_install_exe(${MCNP_EXEC})
 set_target_properties(${MCNP_EXEC} PROPERTIES LINKER_LANGUAGE Fortran)
-mcnp_symlink_exe(${MCNP_EXEC} ${MCNP_EXEC_SYM})
+if (NOT BUILD_MCNP620)
+  mcnp_symlink_exe(${MCNP_EXEC} ${MCNP_EXEC_SYM})
+endif ()
