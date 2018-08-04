@@ -1,3 +1,18 @@
+diff -rN '--unified=0' MCNP620/Source/src/burn_out.F90 MCNP620/Source_new/src/burn_out.F90
+--- MCNP620/Source/src/burn_out.F90
++++ MCNP620/Source_new/src/burn_out.F90
+@@ -461 +461 @@
+-        write (iuo,'(i4,i7,6es11.3)') iz,nx_nm(2,im,ib),bt_nm(2,im,1:6,ib)
++        write (iuo,'(i4,i7,6es15.7)') iz,nx_nm(2,im,ib),bt_nm(2,im,1:6,ib)
+@@ -463 +463 @@
+-      write (iuo,'(a,6es11.3)') '     totals',bt_n(2,n,1:6,ib)
++      write (iuo,'(a,6es15.7)') '     totals',bt_n(2,n,1:6,ib)
+@@ -475 +475 @@
+-        write (iuo,'(i4,i7,6es11.3)') iz,nx_nm(1,im,ib),bt_nm(1,im,1:6,ib)
++        write (iuo,'(i4,i7,6es15.7)') iz,nx_nm(1,im,ib),bt_nm(1,im,1:6,ib)
+@@ -477 +477 @@
+-      write (iuo,'(a,6es11.3,1x)') '     totals',bt_n(1,n,1:6,ib)
++      write (iuo,'(a,6es15.7,1x)') '     totals',bt_n(1,n,1:6,ib)
 diff -rN '--unified=0' MCNP620/Source/src/main.F90 MCNP620/Source_new/src/main.F90
 --- MCNP620/Source/src/main.F90
 +++ MCNP620/Source_new/src/main.F90
@@ -763,3 +778,15 @@ diff -rN '--unified=0' MCNP620/Source/src/mcnp_storage.F90 MCNP620/Source_new/sr
 +   end subroutine mcnp_alloc_i1_7
 @@ -208 +772,0 @@
 -#FPP_TEMPLATE_END
+diff -rN '--unified=0' MCNP620/Source/src/torus.F90 MCNP620/Source_new/src/torus.F90
+--- MCNP620/Source/src/torus.F90
++++ MCNP620/Source_new/src/torus.F90
+@@ -85 +85,7 @@
+-      if( abs(t3)<=z0 )  go to 40
++      if( abs(t3)<=z0 ) then
++        if (xx(m) < 0.) then
++          cycle DO_60
++        else
++          go to 40
++        endif
++      endif
