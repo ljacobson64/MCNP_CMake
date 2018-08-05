@@ -29,18 +29,14 @@ else ()
 endif ()
 
 # C compiler flags
-if (CMAKE_C_COMPILER_ID STREQUAL "Intel")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
-else ()
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
+if (NOT CMAKE_C_COMPILER_ID STREQUAL "Intel")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-common")
 endif ()
 
 # CXX compiler flags
-if (CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64")
-else ()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64")
+if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-common")
 endif ()
 
