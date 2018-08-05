@@ -147,7 +147,6 @@ $ tree -d
 ├── MCNP620
 │   ├── Source
 │   │   ├── cgm
-│   │   ├── config
 │   │   ├── dedx
 │   │   ├── hexs
 │   │   ├── import
