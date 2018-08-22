@@ -16,5 +16,5 @@ cp -r MCNPX27/Source MCNPX27/Source_orig
 cp -r MCNP602/Source MCNP602/Source_orig
 cp -r MCNP610/Source MCNP610/Source_orig
 cp -r MCNP611/Source MCNP611/Source_orig
-cp -r MCNP611/Source MCNP620/Source_orig
+cp -r MCNP620/Source MCNP620/Source_orig
 ./patch.sh
