@@ -58,14 +58,13 @@ else ()
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-form")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -mieee-fp")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdollar-ok")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -std=f2003")
+  # OpenMPI is not Fortran 2003 compliant
+  if (NOT BUILD_MPI)
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -std=f2003")
+  endif ()
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-real-8")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-double-8")
 endif ()
-
-# Include directories
-####include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/import)
-####include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/import/cgm)
 
 # Preprocessor directives
 add_definitions(-DKODE="mcnp")
