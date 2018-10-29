@@ -14,9 +14,6 @@ build system. The versions of MCNP supported are
 * ``611`` (MCNP6 version 6.1.1beta), and
 * ``620`` (MCNP6 version 6.2).
 
-Support for MCNP6 version 6.2 will be added shortly after it becomes available
-from RSICC.
-
 Build options
 -------------
 
