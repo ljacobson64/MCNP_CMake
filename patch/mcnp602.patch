@@ -1,6 +1,6 @@
 diff -rN '--unified=0' MCNP602/Source/dotcomm/dotcomm.h MCNP602/Source_new/dotcomm/dotcomm.h
---- MCNP602/Source/dotcomm/dotcomm.h	2024-05-21 10:51:10.013039879 -0500
-+++ MCNP602/Source_new/dotcomm/dotcomm.h	2024-05-21 12:35:22.528118094 -0500
+--- MCNP602/Source/dotcomm/dotcomm.h
++++ MCNP602/Source_new/dotcomm/dotcomm.h
 @@ -165 +165 @@
 -#define DOTCOMM_Datatype   int
 +#define DOTCOMM_Datatype   MPI_Datatype
@@ -8,28 +8,28 @@ diff -rN '--unified=0' MCNP602/Source/dotcomm/dotcomm.h MCNP602/Source_new/dotco
 -				 int             *datatype,
 +				 DOTCOMM_Datatype *datatype,
 diff -rN '--unified=0' MCNP602/Source/dotcomm/dotcommi_enroll.c MCNP602/Source_new/dotcomm/dotcommi_enroll.c
---- MCNP602/Source/dotcomm/dotcommi_enroll.c	2024-05-21 10:51:10.013039879 -0500
-+++ MCNP602/Source_new/dotcomm/dotcommi_enroll.c	2024-05-21 12:43:56.866450896 -0500
+--- MCNP602/Source/dotcomm/dotcommi_enroll.c
++++ MCNP602/Source_new/dotcomm/dotcommi_enroll.c
 @@ -60,0 +61,2 @@
 +  DOTCOMM_Context  
 +    default_user_context;   /* Set to MPI_COMM_WORLD.                        */
 @@ -62 +63,0 @@
 -    default_user_context,   /* Set to MPI_COMM_WORLD.                        */
 diff -rN '--unified=0' MCNP602/Source/dotcomm/dotcommi_pack.c MCNP602/Source_new/dotcomm/dotcommi_pack.c
---- MCNP602/Source/dotcomm/dotcommi_pack.c	2024-05-21 10:51:10.013039879 -0500
-+++ MCNP602/Source_new/dotcomm/dotcommi_pack.c	2024-05-21 12:37:01.882765177 -0500
+--- MCNP602/Source/dotcomm/dotcommi_pack.c
++++ MCNP602/Source_new/dotcomm/dotcommi_pack.c
 @@ -60 +60 @@
 -void DOTCOMMI_PACK ( const void *pv, int *count, int *datatype, int *ierr)
 +void DOTCOMMI_PACK ( const void *pv, int *count, DOTCOMM_Datatype *datatype, int *ierr)
 diff -rN '--unified=0' MCNP602/Source/dotcomm/dotcommpi_mpi.h MCNP602/Source_new/dotcomm/dotcommpi_mpi.h
---- MCNP602/Source/dotcomm/dotcommpi_mpi.h	2024-05-21 10:51:10.013039879 -0500
-+++ MCNP602/Source_new/dotcomm/dotcommpi_mpi.h	2024-05-21 12:36:19.571863125 -0500
+--- MCNP602/Source/dotcomm/dotcommpi_mpi.h
++++ MCNP602/Source_new/dotcomm/dotcommpi_mpi.h
 @@ -35 +35 @@
 -  int dotcommpi_sizeof ( int datatype );
 +  int dotcommpi_sizeof ( DOTCOMM_Datatype datatype );
 diff -rN '--unified=0' MCNP602/Source/dotcomm/dotcommpi_sizeof.c MCNP602/Source_new/dotcomm/dotcommpi_sizeof.c
---- MCNP602/Source/dotcomm/dotcommpi_sizeof.c	2024-05-21 10:51:10.013039879 -0500
-+++ MCNP602/Source_new/dotcomm/dotcommpi_sizeof.c	2024-05-21 12:37:15.046114903 -0500
+--- MCNP602/Source/dotcomm/dotcommpi_sizeof.c
++++ MCNP602/Source_new/dotcomm/dotcommpi_sizeof.c
 @@ -40 +40 @@
 -int dotcommpi_sizeof ( int datatype )
 +int dotcommpi_sizeof ( DOTCOMM_Datatype datatype )

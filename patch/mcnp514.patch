@@ -1,6 +1,6 @@
 diff -rN '--unified=0' MCNP514/Source/dotcomm/include/dotcomm.h MCNP514/Source_new/dotcomm/include/dotcomm.h
---- MCNP514/Source/dotcomm/include/dotcomm.h	2024-05-21 10:51:09.953041525 -0500
-+++ MCNP514/Source_new/dotcomm/include/dotcomm.h	2024-05-21 12:32:38.248472430 -0500
+--- MCNP514/Source/dotcomm/include/dotcomm.h
++++ MCNP514/Source_new/dotcomm/include/dotcomm.h
 @@ -164 +164 @@
 -#define DOTCOMM_Datatype   int
 +#define DOTCOMM_Datatype   MPI_Datatype
@@ -8,28 +8,28 @@ diff -rN '--unified=0' MCNP514/Source/dotcomm/include/dotcomm.h MCNP514/Source_n
 -				 int             *datatype,
 +				 DOTCOMM_Datatype *datatype,
 diff -rN '--unified=0' MCNP514/Source/dotcomm/src/internals/mpi/dotcommi_enroll.c MCNP514/Source_new/dotcomm/src/internals/mpi/dotcommi_enroll.c
---- MCNP514/Source/dotcomm/src/internals/mpi/dotcommi_enroll.c	2024-05-21 10:51:09.953041525 -0500
-+++ MCNP514/Source_new/dotcomm/src/internals/mpi/dotcommi_enroll.c	2024-05-21 12:43:29.565181707 -0500
+--- MCNP514/Source/dotcomm/src/internals/mpi/dotcommi_enroll.c
++++ MCNP514/Source_new/dotcomm/src/internals/mpi/dotcommi_enroll.c
 @@ -60,0 +61,2 @@
 +  DOTCOMM_Context  
 +    default_user_context;   /* Set to MPI_COMM_WORLD.                        */
 @@ -62 +63,0 @@
 -    default_user_context,   /* Set to MPI_COMM_WORLD.                        */
 diff -rN '--unified=0' MCNP514/Source/dotcomm/src/internals/mpi/dotcommi_pack.c MCNP514/Source_new/dotcomm/src/internals/mpi/dotcommi_pack.c
---- MCNP514/Source/dotcomm/src/internals/mpi/dotcommi_pack.c	2024-05-21 10:51:09.953041525 -0500
-+++ MCNP514/Source_new/dotcomm/src/internals/mpi/dotcommi_pack.c	2024-05-21 12:32:55.121818552 -0500
+--- MCNP514/Source/dotcomm/src/internals/mpi/dotcommi_pack.c
++++ MCNP514/Source_new/dotcomm/src/internals/mpi/dotcommi_pack.c
 @@ -60 +60 @@
 -void DOTCOMMI_PACK ( const void *pv, int *count, int *datatype, int *ierr)
 +void DOTCOMMI_PACK ( const void *pv, int *count, DOTCOMM_Datatype *datatype, int *ierr)
 diff -rN '--unified=0' MCNP514/Source/dotcomm/src/internals/mpi/dotcommpi_mpi.h MCNP514/Source_new/dotcomm/src/internals/mpi/dotcommpi_mpi.h
---- MCNP514/Source/dotcomm/src/internals/mpi/dotcommpi_mpi.h	2024-05-21 10:51:09.953041525 -0500
-+++ MCNP514/Source_new/dotcomm/src/internals/mpi/dotcommpi_mpi.h	2024-05-21 12:32:43.026643553 -0500
+--- MCNP514/Source/dotcomm/src/internals/mpi/dotcommpi_mpi.h
++++ MCNP514/Source_new/dotcomm/src/internals/mpi/dotcommpi_mpi.h
 @@ -35 +35 @@
 -  int dotcommpi_sizeof ( int datatype );
 +  int dotcommpi_sizeof ( DOTCOMM_Datatype datatype );
 diff -rN '--unified=0' MCNP514/Source/dotcomm/src/internals/mpi/dotcommpi_sizeof.c MCNP514/Source_new/dotcomm/src/internals/mpi/dotcommpi_sizeof.c
---- MCNP514/Source/dotcomm/src/internals/mpi/dotcommpi_sizeof.c	2024-05-21 10:51:09.953041525 -0500
-+++ MCNP514/Source_new/dotcomm/src/internals/mpi/dotcommpi_sizeof.c	2024-05-21 12:33:01.967401816 -0500
+--- MCNP514/Source/dotcomm/src/internals/mpi/dotcommpi_sizeof.c
++++ MCNP514/Source_new/dotcomm/src/internals/mpi/dotcommpi_sizeof.c
 @@ -40 +40 @@
 -int dotcommpi_sizeof ( int datatype )
 +int dotcommpi_sizeof ( DOTCOMM_Datatype datatype )

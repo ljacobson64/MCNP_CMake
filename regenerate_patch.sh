@@ -15,9 +15,11 @@ for version in ${versions}; do
   diff -rN "--unified=0" ${folder}/Source ${folder}/Source_new > temp
   mv ${folder}/Source      ${folder}/Source_orig
   mv ${folder}/Source_new  ${folder}/Source
-  sed -e "s/.F\t.*/.F/" \
+  sed -e "s/.inc\t.*/.inc/" \
+      -e "s/.c\t.*/.c/"     \
+      -e "s/.h\t.*/.h/"     \
+      -e "s/.F\t.*/.F/"     \
       -e "s/.F90\t.*/.F90/" \
-      -e "s/.inc\t.*/.inc/" \
       temp > patch/${patch}
   rm -f temp
 done
