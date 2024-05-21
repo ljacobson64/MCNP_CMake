@@ -1,3 +1,38 @@
+diff -rN '--unified=0' MCNP516/Source/dotcomm/include/dotcomm.h MCNP516/Source_new/dotcomm/include/dotcomm.h
+--- MCNP516/Source/dotcomm/include/dotcomm.h	2024-05-21 10:51:09.973040969 -0500
++++ MCNP516/Source_new/dotcomm/include/dotcomm.h	2024-05-21 12:12:36.242680810 -0500
+@@ -165 +165 @@
+-#define DOTCOMM_Datatype   int
++#define DOTCOMM_Datatype   MPI_Datatype
+@@ -575 +575 @@
+-				 int             *datatype,
++				 DOTCOMM_Datatype *datatype,
+diff -rN '--unified=0' MCNP516/Source/dotcomm/src/internals/mpi/dotcommi_enroll.c MCNP516/Source_new/dotcomm/src/internals/mpi/dotcommi_enroll.c
+--- MCNP516/Source/dotcomm/src/internals/mpi/dotcommi_enroll.c	2024-05-21 10:51:09.973040969 -0500
++++ MCNP516/Source_new/dotcomm/src/internals/mpi/dotcommi_enroll.c	2024-05-21 12:34:20.251806640 -0500
+@@ -60,0 +61,2 @@
++  DOTCOMM_Context
++    default_user_context;   /* Set to MPI_COMM_WORLD.                        */
+@@ -62 +63,0 @@
+-    default_user_context,   /* Set to MPI_COMM_WORLD.                        */
+diff -rN '--unified=0' MCNP516/Source/dotcomm/src/internals/mpi/dotcommi_pack.c MCNP516/Source_new/dotcomm/src/internals/mpi/dotcommi_pack.c
+--- MCNP516/Source/dotcomm/src/internals/mpi/dotcommi_pack.c	2024-05-21 10:51:09.973040969 -0500
++++ MCNP516/Source_new/dotcomm/src/internals/mpi/dotcommi_pack.c	2024-05-21 12:11:35.362584333 -0500
+@@ -60 +60 @@
+-void DOTCOMMI_PACK ( const void *pv, int *count, int *datatype, int *ierr)
++void DOTCOMMI_PACK ( const void *pv, int *count, DOTCOMM_Datatype *datatype, int *ierr)
+diff -rN '--unified=0' MCNP516/Source/dotcomm/src/internals/mpi/dotcommpi_mpi.h MCNP516/Source_new/dotcomm/src/internals/mpi/dotcommpi_mpi.h
+--- MCNP516/Source/dotcomm/src/internals/mpi/dotcommpi_mpi.h	2024-05-21 10:51:09.973040969 -0500
++++ MCNP516/Source_new/dotcomm/src/internals/mpi/dotcommpi_mpi.h	2024-05-21 12:09:06.252482057 -0500
+@@ -35 +35 @@
+-  int dotcommpi_sizeof ( int datatype );
++  int dotcommpi_sizeof ( DOTCOMM_Datatype datatype );
+diff -rN '--unified=0' MCNP516/Source/dotcomm/src/internals/mpi/dotcommpi_sizeof.c MCNP516/Source_new/dotcomm/src/internals/mpi/dotcommpi_sizeof.c
+--- MCNP516/Source/dotcomm/src/internals/mpi/dotcommpi_sizeof.c	2024-05-21 10:51:09.973040969 -0500
++++ MCNP516/Source_new/dotcomm/src/internals/mpi/dotcommpi_sizeof.c	2024-05-21 12:09:08.972441550 -0500
+@@ -40 +40 @@
+-int dotcommpi_sizeof ( int datatype )
++int dotcommpi_sizeof ( DOTCOMM_Datatype datatype )
 diff -rN '--unified=0' MCNP516/Source/src/torus.F90 MCNP516/Source_new/src/torus.F90
 --- MCNP516/Source/src/torus.F90
 +++ MCNP516/Source_new/src/torus.F90
