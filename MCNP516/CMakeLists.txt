@@ -40,6 +40,7 @@ else ()
   if (BUILD_PLOT)
     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-real-8")
   endif ()
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-argument-mismatch")
 endif ()
 
 # Preprocessor directives

@@ -25,6 +25,12 @@ else ()
   message(FATAL_ERROR "MCNP${MCNP_VERSION} source files not found in MCNP${MCNP_VERSION}/Source")
 endif ()
 
+# Fortran compiler flags
+if (INTEL_FORTRAN)
+else ()
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-argument-mismatch")
+endif ()
+
 # Include directories
 include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/include)
 
