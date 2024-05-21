@@ -19,13 +19,11 @@ diff -rN '--unified=0' MCNP611/Source/import/strexc.inc MCNP611/Source_new/impor
 diff -rN '--unified=0' MCNP611/Source/src/cgm_interface.F90 MCNP611/Source_new/src/cgm_interface.F90
 --- MCNP611/Source/src/cgm_interface.F90
 +++ MCNP611/Source_new/src/cgm_interface.F90
-@@ -28,0 +29,4 @@
-+#if __INTEL_COMPILER >= 1600
+@@ -29,2 +29,2 @@
+-      import :: c_double
+-      real (kind=c_double), external, bind(c) :: rngfunc
 +      import :: c_funptr
 +      type(c_funptr), value :: rngfunc
-+#else
-@@ -30,0 +35 @@
-+#endif
 diff -rN '--unified=0' MCNP611/Source/src/charged_particle_history.F90 MCNP611/Source_new/src/charged_particle_history.F90
 --- MCNP611/Source/src/charged_particle_history.F90
 +++ MCNP611/Source_new/src/charged_particle_history.F90
@@ -45,24 +43,14 @@ diff -rN '--unified=0' MCNP611/Source/src/exemes.F90 MCNP611/Source_new/src/exem
 diff -rN '--unified=0' MCNP611/Source/src/imcn.F90 MCNP611/Source_new/src/imcn.F90
 --- MCNP611/Source/src/imcn.F90
 +++ MCNP611/Source_new/src/imcn.F90
-@@ -36,0 +37,3 @@
-+#if __INTEL_COMPILER >= 1600
+@@ -36,0 +37 @@
 +  use, intrinsic :: iso_c_binding
-+#endif
-@@ -2033 +2036,5 @@
+@@ -2033 +2034 @@
 -      call setrngcgm(rang)          
-+#if __INTEL_COMPILER >= 1600
 +      call setrngcgm(c_funloc(rang))
-+#else
-+      call setrngcgm(rang)
-+#endif
-@@ -2299 +2306,5 @@
+@@ -2299 +2300 @@
 -      call setrngcgm(rang)          
-+#if __INTEL_COMPILER >= 1600
 +      call setrngcgm(c_funloc(rang))
-+#else
-+      call setrngcgm(rang)
-+#endif
 diff -rN '--unified=0' MCNP611/Source/src/main.F90 MCNP611/Source_new/src/main.F90
 --- MCNP611/Source/src/main.F90
 +++ MCNP611/Source_new/src/main.F90
@@ -153,17 +141,11 @@ diff -rN '--unified=0' MCNP611/Source/src/mcnp_env.F90 MCNP611/Source_new/src/mc
 diff -rN '--unified=0' MCNP611/Source/src/msgtsk.F90 MCNP611/Source_new/src/msgtsk.F90
 --- MCNP611/Source/src/msgtsk.F90
 +++ MCNP611/Source_new/src/msgtsk.F90
-@@ -80,0 +81,3 @@
-+#if __INTEL_COMPILER >= 1600
+@@ -80,0 +81 @@
 +  use, intrinsic :: iso_c_binding
-+#endif
-@@ -308 +311,5 @@
+@@ -308 +309 @@
 -    call setrngcgm(rang) 
-+#if __INTEL_COMPILER >= 1600
 +    call setrngcgm(c_funloc(rang))
-+#else
-+    call setrngcgm(rang)
-+#endif
 diff -rN '--unified=0' MCNP611/Source/src/pblcom.F90 MCNP611/Source_new/src/pblcom.F90
 --- MCNP611/Source/src/pblcom.F90
 +++ MCNP611/Source_new/src/pblcom.F90

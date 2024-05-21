@@ -1,3 +1,9 @@
+diff -rN '--unified=0' MCNPX27/Source/include/lcs/charla.h MCNPX27/Source_new/include/lcs/charla.h
+--- MCNPX27/Source/include/lcs/charla.h
++++ MCNPX27/Source_new/include/lcs/charla.h
+@@ -7 +7 @@
+-      common /charla/ msub, inh, outh, histp, neutp, bertin, elstin,            !/*ch          7*/
++      common /charla/ msub, inh, outh, neutp, bertin, elstin,                   !/*ch          7*/
 diff -rN '--unified=0' MCNPX27/Source/mcnpx/mcnpf/GLOBAL1_zc.F MCNPX27/Source_new/mcnpx/mcnpf/GLOBAL1_zc.F
 --- MCNPX27/Source/mcnpx/mcnpf/GLOBAL1_zc.F
 +++ MCNPX27/Source_new/mcnpx/mcnpf/GLOBAL1_zc.F
