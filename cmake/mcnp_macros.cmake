@@ -28,6 +28,32 @@ macro (mcnp_setup_build)
   execute_process(COMMAND uname -s       OUTPUT_VARIABLE ENV_OS   OUTPUT_STRIP_TRAILING_WHITESPACE)
   execute_process(COMMAND date +%m/%d/%y OUTPUT_VARIABLE ENV_DATE OUTPUT_STRIP_TRAILING_WHITESPACE)
   execute_process(COMMAND date +%H:%M:%S OUTPUT_VARIABLE ENV_TIME OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  # Determine if intel compilers are being used
+  if (CMAKE_C_COMPILER_ID STREQUAL "Intel" OR
+      CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM")
+    set(INTEL_C TRUE)
+  else ()
+    set(INTEL_C FALSE)
+  endif ()
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "Intel" OR
+      CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
+    set(INTEL_CXX TRUE)
+  else ()
+    set(INTEL_CXX FALSE)
+  endif ()
+  if (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel" OR
+      CMAKE_Fortran_COMPILER_ID STREQUAL "IntelLLVM")
+    set(INTEL_FORTRAN TRUE)
+  else ()
+    set(INTEL_FORTRAN FALSE)
+  endif ()
+  message(STATUS "CMAKE_C_COMPILER_ID: ${CMAKE_C_COMPILER_ID}")
+  message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
+  message(STATUS "CMAKE_Fortran_COMPILER_ID: ${CMAKE_Fortran_COMPILER_ID}")
+  message(STATUS "INTEL_C: ${INTEL_C}")
+  message(STATUS "INTEL_CXX: ${INTEL_CXX}")
+  message(STATUS "INTEL_FORTRAN: ${INTEL_FORTRAN}")
 endmacro ()
 
 macro (mcnp_setup_options)

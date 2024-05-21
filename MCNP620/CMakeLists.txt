@@ -30,18 +30,18 @@ endif ()
 
 # C compiler flags
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
-if (NOT CMAKE_C_COMPILER_ID STREQUAL "Intel")
+if (NOT INTEL_C)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-common")
 endif ()
 
 # CXX compiler flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64")
-if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+if (NOT INTEL_CXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-common")
 endif ()
 
 # Fortran compiler flags
-if (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
+if (INTEL_FORTRAN)
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -free")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -heap-arrays 1024")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -traceback")
@@ -69,7 +69,7 @@ add_definitions(-DTVERS="6.2.0")
 add_definitions(-DLODDAT="${ENV_DATE}")
 add_definitions(-DLINUX=ON)
 add_definitions(-DUNIX=ON)
-if (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
+if (INTEL_FORTRAN)
   add_definitions(-DINTEL=ON)
 else ()
   add_definitions(-DGFORTRAN=ON)

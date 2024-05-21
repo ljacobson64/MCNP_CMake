@@ -1,5 +1,5 @@
-project(MCNP)
 cmake_minimum_required(VERSION 2.8)
+project(MCNP)
 enable_language(Fortran)
 
 # Make the scripts in the "cmake" directory available to CMake
