@@ -1,4 +1,5 @@
 macro (mcnp_setup_build)
+
   message("")
 
   # Default to a release build
@@ -54,9 +55,11 @@ macro (mcnp_setup_build)
   message(STATUS "INTEL_C: ${INTEL_C}")
   message(STATUS "INTEL_CXX: ${INTEL_CXX}")
   message(STATUS "INTEL_FORTRAN: ${INTEL_FORTRAN}")
+
 endmacro ()
 
 macro (mcnp_setup_options)
+
   message("")
 
   option(BUILD_MCNP514    "Build MCNP514"               OFF)
@@ -73,9 +76,11 @@ macro (mcnp_setup_options)
 
   option(BUILD_STATIC_EXE "Build static executables"    OFF)
   option(BUILD_PIC        "Build with PIC"              OFF)
+
 endmacro ()
 
 macro (mcnp_setup_flags)
+
   message("")
 
   if (BUILD_PIC)
@@ -131,10 +136,12 @@ macro (mcnp_setup_flags)
   message(STATUS "CMAKE_CXX_IMPLICIT_LINK_LIBRARIES: ${CMAKE_CXX_IMPLICIT_LINK_LIBRARIES}")
   message(STATUS "CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES: ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES}")
   message(STATUS "CMAKE_EXE_LINKER_FLAGS: ${CMAKE_EXE_LINKER_FLAGS}")
+
 endmacro ()
 
 # Install an executable
 macro (mcnp_install_exe exe_name)
+
   message(STATUS "Building executable: ${exe_name}")
 
   add_executable(${exe_name} ${SRC_FILES})
@@ -143,9 +150,12 @@ macro (mcnp_install_exe exe_name)
   endif ()
   target_link_libraries(${exe_name} ${LINK_LIBS})
   install(TARGETS ${exe_name} DESTINATION ${INSTALL_BIN_DIR})
+
 endmacro ()
 
 macro(mcnp_symlink_exe exe_name exe_sym_name)
+
   install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${exe_name} ${exe_sym_name} \
                                 WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}/${INSTALL_BIN_DIR})")
+
 endmacro()
