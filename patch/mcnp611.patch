@@ -57,6 +57,18 @@ diff -rN '--unified=0' MCNP611/Source/src/main.F90 MCNP611/Source_new/src/main.F
 @@ -64 +64 @@
 -  use mcnp_env, only : HDPTH0, KOD, LODDAT, VER
 +  use mcnp_env, only : hdpth0, kod, loddat, ver
+diff -rN '--unified=0' MCNP611/Source/src/mc.c MCNP611/Source_new/src/mc.c
+--- MCNP611/Source/src/mc.c
++++ MCNP611/Source_new/src/mc.c
+@@ -485 +485 @@
+-  extern void xevent();
++  extern void xevent(IDEF wait);
+@@ -517 +517 @@
+-  extern void xevent();
++  extern void xevent(IDEF wait);
+@@ -576 +576 @@
+-  extern void xevent();
++  extern void xevent(IDEF wait);
 diff -rN '--unified=0' MCNP611/Source/src/mcnp_env.F90 MCNP611/Source_new/src/mcnp_env.F90
 --- MCNP611/Source/src/mcnp_env.F90
 +++ MCNP611/Source_new/src/mcnp_env.F90

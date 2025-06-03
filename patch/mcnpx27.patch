@@ -4,6 +4,18 @@ diff -rN '--unified=0' MCNPX27/Source/include/lcs/charla.h MCNPX27/Source_new/in
 @@ -7 +7 @@
 -      common /charla/ msub, inh, outh, histp, neutp, bertin, elstin,            !/*ch          7*/
 +      common /charla/ msub, inh, outh, neutp, bertin, elstin,                   !/*ch          7*/
+diff -rN '--unified=0' MCNPX27/Source/mcnpx/mcnpc/mcnpc.c MCNPX27/Source_new/mcnpx/mcnpc/mcnpc.c
+--- MCNPX27/Source/mcnpx/mcnpc/mcnpc.c
++++ MCNPX27/Source_new/mcnpx/mcnpc/mcnpc.c
+@@ -637 +637 @@
+-extern void xevent();                                                           /*!mc4c      199*/
++extern void xevent(IDEF wait);                                                  /*!mc4c      199*/
+@@ -684 +684 @@
+-extern void xevent();                                                           /*!mc4c      212*/
++extern void xevent(IDEF wait);                                                  /*!mc4c      212*/
+@@ -785 +785 @@
+-extern void xevent();                                                           /*!mc4c2      81*/
++extern void xevent(IDEF wait);                                                  /*!mc4c2      81*/
 diff -rN '--unified=0' MCNPX27/Source/mcnpx/mcnpf/GLOBAL1_zc.F MCNPX27/Source_new/mcnpx/mcnpf/GLOBAL1_zc.F
 --- MCNPX27/Source/mcnpx/mcnpf/GLOBAL1_zc.F
 +++ MCNPX27/Source_new/mcnpx/mcnpf/GLOBAL1_zc.F

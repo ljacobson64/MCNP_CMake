@@ -15,6 +15,9 @@ diff -rN '--unified=0' MCNP514/Source/dotcomm/src/internals/mpi/dotcommi_enroll.
 +    default_user_context;   /* Set to MPI_COMM_WORLD.                        */
 @@ -62 +63,0 @@
 -    default_user_context,   /* Set to MPI_COMM_WORLD.                        */
+@@ -93 +94 @@
+-  DOTCOMMI_SET_CONTEXT ( &default_user_context, ierr );
++  DOTCOMMI_SET_CONTEXT ( (int*)&default_user_context, ierr );
 diff -rN '--unified=0' MCNP514/Source/dotcomm/src/internals/mpi/dotcommi_pack.c MCNP514/Source_new/dotcomm/src/internals/mpi/dotcommi_pack.c
 --- MCNP514/Source/dotcomm/src/internals/mpi/dotcommi_pack.c
 +++ MCNP514/Source_new/dotcomm/src/internals/mpi/dotcommi_pack.c
@@ -33,6 +36,18 @@ diff -rN '--unified=0' MCNP514/Source/dotcomm/src/internals/mpi/dotcommpi_sizeof
 @@ -40 +40 @@
 -int dotcommpi_sizeof ( int datatype )
 +int dotcommpi_sizeof ( DOTCOMM_Datatype datatype )
+diff -rN '--unified=0' MCNP514/Source/src/mc.c MCNP514/Source_new/src/mc.c
+--- MCNP514/Source/src/mc.c
++++ MCNP514/Source_new/src/mc.c
+@@ -437 +437 @@
+-  extern void xevent();
++  extern void xevent(IDEF wait);
+@@ -469 +469 @@
+-  extern void xevent();
++  extern void xevent(IDEF wait);
+@@ -528 +528 @@
+-  extern void xevent();
++  extern void xevent(IDEF wait);
 diff -rN '--unified=0' MCNP514/Source/src/torus.F90 MCNP514/Source_new/src/torus.F90
 --- MCNP514/Source/src/torus.F90
 +++ MCNP514/Source_new/src/torus.F90
